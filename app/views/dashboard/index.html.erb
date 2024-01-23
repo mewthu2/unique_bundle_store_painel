@@ -1,0 +1,87 @@
+
+<div class="row d-flex justify-content-center">
+  <div class="btn-group mb-3" role="group">
+    <%= link_to dashboard_index_path(status: 'positive'), class: 'btn btn-success text-light' do %> Positivo <i class="fas fa-check"></i><% end %>
+    <%= link_to dashboard_index_path(status: 'negative'), class: 'btn btn-danger text-light' do %> Negativo <i class="fas fa-times"></i><% end %>
+  </div>
+</div>
+
+<%= form_tag(dashboard_index_path, method: 'get') do %>
+  <div class="card mb-lg advanced-search-form bg-dark text-light" id="filters">
+    <div class="card-header text-info">
+      Pesquisa avançada
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <%= label_tag :search, 'Procurar' %>
+          <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar' %>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-12">
+          <%= label_tag :all, 'Todos' %>
+          <%= check_box_tag :all, 'todos', params[:all] == 'todos', class: 'form-check-input' %>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
+    </div>
+  </div>
+<% end %>
+
+
+
+
+<div class="row">
+  <div class="col-12">
+    <table class="table table-dark table-hover table-responsive" style="overflow-x: scroll;" id="products-table">
+      <thead>
+        <tr>
+          <th class="text-center"><%= 'ID' %></th>
+          <th class="text-center"><%= Product.human_attribute_name :id_product %></th>
+          <th class="text-center"><%= 'Estoque' %></th>
+          <th class="text-center"><%= Product.human_attribute_name :item_name %></th>
+          <th class="text-center"><%= Product.human_attribute_name :item_description %></th>
+          <th class="text-center"><%= Product.human_attribute_name :listing_id %></th>
+          <th class="text-center"><%= Product.human_attribute_name :seller_sku %></th>
+          <th class="text-center"><%= Product.human_attribute_name :price %></th>
+          <th class="text-center"><%= Product.human_attribute_name :product_id_type %></th>
+          <th class="text-center"><%= Product.human_attribute_name :asin1 %></th>
+          <th class="text-center"><%= Product.human_attribute_name :status %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td class="text-center"><%= product.id %></td>
+            <td class="text-center"><%= product.id_product %></td>
+            <td class="text-center table-<%= product.resolver_stock.to_i < 0 ? 'success' : 'danger' %>"><%= product.resolver_stock %></td>
+            <td class="text-center"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
+            <td class="text-center"><%= ActionController::Base.helpers.truncate(product.item_description, length: 10, omission: '...') %></td>
+            <td class="text-center"><%= product.listing_id %></td>
+            <td class="text-center"><%= product.seller_sku %></td>
+            <td class="text-center"><%= product.price %></td>
+            <td class="text-center"><%= product.product_id_type %></td>
+            <td class="text-center"><%= product.asin1 %></td>
+            <td class="text-center"><%= product.status %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="12">
+            <%= page_entries_info @products %>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+      $('.table').DataTable();
+  });
+</script>
+<%= will_paginate @products, list_classes: %w[pagination justify-content-center mt-lg], inner_window: 1 %>

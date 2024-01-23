@@ -1,0 +1,22 @@
+{
+  "name": "unique_bundle_store_painel",
+  "repository": "https://github.com/mewthu2/unique_bundle_store_painel",
+  "author": "Daniel Correa <mewtwofernandes@gmail.com>",
+  "private": "true",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.2",
+    "@hotwired/stimulus": "^3.2.2",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.2",
+    "datatables": "^1.10.18",
+    "esbuild": "^0.19.3",
+    "jquery": "^3.7.1",
+    "sass": "^1.68.0",
+    "stimulus": "^3.2.2",
+    "turbo": "^1.10.14"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
+    "build:css": "sass ./app/assets/stylesheets/admin.scss --no-source-map --load-path=node_modules"
+  }
+}

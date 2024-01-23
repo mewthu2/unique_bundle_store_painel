@@ -1,0 +1,71 @@
+<aside class="left-menu">
+  <div class="aside-inner">
+    <div class="flex-shrink-0 p-3 text-white">
+      <ul class="nav nav-pills flex-column mb-auto">
+        <a class="btn btn-dark mb-3 text-light" href="/" role="button">
+          <i class="fa-regular fa-house"></i> <span class="name-button"> Home </span>
+        </a>
+
+        <a class="btn btn-dark text-light mb-3" data-bs-toggle="collapse" href="#collase-dashboard" role="button" aria-expanded="false" aria-controls="collase-dashboard">
+          <i class="justify-content-center fa-regular fa-concierge-bell"></i> <span class="name-button"> Dashboard </span><i class="fa fa-angle-down arrow"></i>
+        </a>
+        <div class="justify-content-center flex-column mb-auto collapse mb-3" id="collase-dashboard">
+          <div class="mb-3 col-icon"> 
+            <%= link_to dashboard_index_path, class: 'text-light link' do %>
+              <i class="fa-solid fa-binoculars text-info"></i>
+              <span class="name-col">
+                Acompanhamento de estoque
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </ul>
+    </div>
+  </div>
+  <hr>
+  <div class="d-flex justify-content-center" style="position: fixed; margin-top: 23em; margin-left: 8em;">
+    <small class="text-light"> <%= image_tag 'admin/so-logo', style: 'width: 15%;' %></small>
+  </div>
+</aside>
+<style>
+  @media (max-width: 999px) {
+    
+  .navbar-header .navbar-content {
+    display:none !important;
+  }
+  .col-icon {
+    display: flex;
+    justify-content: center;
+  }
+  .name-col {
+    display:none;
+  }
+
+  .navbar-header .navbar-dropdowns {
+    float: inline-start;
+  }
+
+  .name-button,
+
+  .left-menu {
+    width: 70px !important;
+  }
+  
+  .wrapper > section:not(.sem-menu) {
+    margin-left: 60px !important;
+  }
+
+  .navbar-header .navbar-brand .brand-logo,
+  .navbar-header .navbar-brand  {
+    width: 205px !important;
+  }
+
+  .wrapper > section > .content-wrapper .row {
+    margin-top: -7px !important;
+  }
+}
+
+@media (min-width: 1000px) {
+  
+}
+</style>
