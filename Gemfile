@@ -96,5 +96,3 @@ group :test do
 end
 
 gem "sidekiq", "~> 7.2"
-
-gem "shopify_api", "~> 13.3"
