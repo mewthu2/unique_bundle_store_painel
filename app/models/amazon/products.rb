@@ -12,7 +12,7 @@ module Amazon
     end
 
     def self.task_relatory
-      report_type = 'GET_MERCHANT_LISTINGS_ALL_DATA'
+      report_type = 'GET_FLAT_FILE_OPEN_LISTINGS_DATA'
       data_start_time = '2019-12-10T20:11:24.000Z'
       marketplace_ids = [ENV['MARKETPLACE_ID']]
 
@@ -48,7 +48,7 @@ module Amazon
 
       lines_2[1..-1].each do |line|
         values_2 = line.split("\t")
-        listing_id = values_2[header_2.index("listing-id")]
+        listing_id = values_2[header_2.index("sku")]
         data_hash_2 = {}
 
         header_2.each_with_index do |key, index|
@@ -57,6 +57,38 @@ module Amazon
 
         result_hash[listing_id] = data_hash_2
       end
+    end
+
+    def self.inventory_sku_fba
+      token_params = {
+        grant_type: 'refresh_token',
+        refresh_token: ENV['REFRESH_TOKEN'],
+        client_id: ENV['LWA_APP_ID'],
+        client_secret: ENV['LWA_CLIENT_SECRET']
+      }
+
+      # Obtendo o token de acesso
+      token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
+      access_token = JSON.parse(token_response.body)['access_token']
+
+      # Parâmetros para a requisição GET
+      request_params = {
+        details: true,
+        granularityType: 'Marketplace',
+        granularityId: ENV['MARKETPLACE_ID'],
+        sellerSkus: 'VN-CBPG-JD21',
+        marketplaceIds: ENV['MARKETPLACE_ID']
+      }
+
+      # Construindo a URI da requisição
+      inventory_uri = "#{ENV['ENDPOINT_AMAZON']}/fba/inventory/v1/summaries"
+
+      # Fazendo a requisição GET
+      response = HTTParty.get(
+        inventory_uri,
+        query: request_params,
+        headers: { 'x-amz-access-token' => access_token }
+      )
     end
 
     def self.get_inventory_summaries
@@ -73,6 +105,7 @@ module Amazon
 
       request_params = {
         details: true,
+        pagination: '2',
         granularityType: 'Marketplace',
         granularityId: ENV['MARKETPLACE_ID'],
         marketplaceIds: ENV['MARKETPLACE_ID']
@@ -143,7 +176,7 @@ module Amazon
           total_sales_amount += item['totalSales']['amount'].to_f
         end
 
-        prd.update(total_unit_count:, total_sales_amount:, resolver_stock: total_unit_count - prd.quantity.to_i)
+        prd.update(total_unit_count:, total_sales_amount:)
       end
     end
 
@@ -158,6 +191,38 @@ module Amazon
       }
       token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
       access_token = JSON.parse(token_response.body)['access_token']
+    end
+
+    def update_fba_products
+      Product.where(fulfillment_channel: 'FBA').each do |pfba|
+        p 'dormindo 2 segundos'
+        sleep(2.seconds)
+        p 'acordei'
+        request_params = {
+          details: true,
+          granularityType: 'Marketplace',
+          granularityId: ENV['MARKETPLACE_ID'],
+          sellerSkus: pfba.seller_sku.to_s,
+          marketplaceIds: ENV['MARKETPLACE_ID']
+        }
+
+        inventory_uri = "#{ENV['ENDPOINT_AMAZON']}/fba/inventory/v1/summaries"
+
+        response = HTTParty.get(
+          inventory_uri,
+          query: request_params,
+          headers: { 'x-amz-access-token' => access_token }
+        )
+
+        pfba.update(pending_customer_order_quantity: response['payload']['inventorySummaries'][0]['inventoryDetails']['reservedQuantity']['pendingCustomerOrderQuantity'],
+                    quantity: response['payload']['inventorySummaries'][0]['totalQuantity'])
+      end
+    end
+
+    def resolver_stock
+      Product.all.each do |product|
+        product.update(resolver_stock: product.total_unit_count.to_i - (product.pending_customer_order_quantity.nil? ? '0' : product.pending_customer_order_quantity - product.quantity).to_i)
+      end
     end
 
     def create_products(result_hash)

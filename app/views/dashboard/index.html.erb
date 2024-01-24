@@ -39,16 +39,17 @@
     <table class="table table-dark table-hover table-responsive" style="overflow-x: scroll;" id="products-table">
       <thead>
         <tr>
-          <th class="text-center"><%= Product.human_attribute_name :id_product %></th>
+          <th class="text-center"><%= 'ID do Produto' %></th>
           <th class="text-center"><%= 'Armazém' %></th>
           <th class="text-center"><%= 'Estoque' %></th>
-          <th class="text-center"><%= Product.human_attribute_name :item_name %></th>
-          <th class="text-center"><%= Product.human_attribute_name :seller_sku %></th>
-          <th class="text-center"><%= Product.human_attribute_name :price %></th>
-          <th class="text-center"><%= Product.human_attribute_name :product_id_type %></th>
-          <th class="text-center"><%= Product.human_attribute_name :asin1 %></th>
-          <th class="text-center"><%= Product.human_attribute_name :status %></th>
-          <th class="text-center"><%= Product.human_attribute_name :updated_at %></th>
+          <th class="text-center"><%= 'Últimos 30 dias Vendas/$' %></th>
+          <th class="text-center"><%= 'Nome do Item' %></th>
+          <th class="text-center"><%= 'SKU' %></th>
+          <th class="text-center"><%= 'Preço Unitário' %></th>
+          <th class="text-center"><%= 'ID Tipo de Produto' %></th>
+          <th class="text-center"><%= 'ASIN' %></th>
+          <th class="text-center"><%= 'Status' %></th>
+          <th class="text-center"><%= 'Última atualização' %></th>
         </tr>
       </thead>
       <tbody>
@@ -56,7 +57,8 @@
           <tr>
             <td class="text-center"><%= product.id_product %></td>
             <td class="text-center"><%= product.fulfillment_channel %></td>
-            <td class="text-center table-<%= product.resolver_stock.to_i < 0 ? 'success' : 'danger' %>"><%= product.resolver_stock %></td>
+            <td class="text-center table-<%= product.resolver_stock.to_i < 0 ? 'success' : 'danger' %>"><h5><%= product.resolver_stock %></h5></td>
+            <td class="text-center"><%= "#{product.total_unit_count}/#{product.total_sales_amount}" %></td>
             <td class="text-center"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
             <td class="text-center"><%= product.seller_sku %></td>
             <td class="text-center"><%= product.price %></td>
