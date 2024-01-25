@@ -167,7 +167,8 @@ class UpdateProductsSituationJob < ActiveJob::Base
       a = product.total_unit_count.to_i
       b = product.pending_customer_order_quantity.to_i
       c = product.quantity.to_i
-      product.update(resolver_stock: a - b - c)
+      totalx = b - c
+      product.update(resolver_stock: a - totalx)
     end
   end
 
