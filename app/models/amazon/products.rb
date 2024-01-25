@@ -197,7 +197,7 @@ module Amazon
       Product.where(fulfillment_channel: 'FBA').each do |pfba|
         p 'dormindo 2 segundos'
         sleep(2.seconds)
-        p 'acordei'
+        p 'acordei - bora atualizar esses fba brabo'
         request_params = {
           details: true,
           granularityType: 'Marketplace',
@@ -221,7 +221,10 @@ module Amazon
 
     def resolver_stock
       Product.all.each do |product|
-        product.update(resolver_stock: product.total_unit_count.to_i - (product.pending_customer_order_quantity.nil? ? '0' : product.pending_customer_order_quantity - product.quantity).to_i)
+        a = product.total_unit_count.to_i
+        b = product.pending_customer_order_quantity.to_i
+        c = product.quantity.to_i
+        product.update(resolver_stock: a - b - c)
       end
     end
 

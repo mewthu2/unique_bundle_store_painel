@@ -6,6 +6,9 @@ class Product < ApplicationRecord
 
   # Escopos
 
+  add_scope :by_fulfillment_channel do |value|
+    where(fulfillment_channel: value) if value.present?
+  end
   add_scope :by_status do |value|
     case value
     when 'positive'

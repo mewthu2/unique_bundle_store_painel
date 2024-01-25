@@ -1,0 +1,17 @@
+<%= render 'layouts/partials/messages', object: product %>
+
+<%= form_for(product, html: { autocomplete: 'off' }, data: { disabled: read_only }) do |form| %>
+  <div class="page-header">
+    <h4> Editar Produto <small class="text-light"> Dados sobre o produto</small></h4>
+  </div>
+  <div class="row">
+    <%= form.label 'URL do Fornecedor', class: 'col-2 col-form-label text-right' %>
+    <div class="col-12">
+      <%= form.text_field :supplier_url, class: 'form-control', maxlength: 255, required: true %>
+    </div>
+  </div>
+   <div class="panel-buttons bg-dark">
+    <%= link_to dashboard_index_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> <%= t('views.buttons.back')%> <% end %>
+    <% unless read_only %><%= form.button class: 'btn btn-primary btn-lg', data: { disable_with: 'Salvando...' } do %><i class="fa fa-check"></i> Salvar <% end %><% end %>
+  </div>
+<% end %>
