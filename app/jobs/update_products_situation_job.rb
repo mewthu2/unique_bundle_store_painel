@@ -19,7 +19,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
   end
 
   def task_relatory
-    report_type = 'GET_FLAT_FILE_OPEN_LISTINGS_DATA'
+    report_type = 'GET_MERCHANT_LISTINGS_ALL_DATA'
     data_start_time = '2019-12-10T20:11:24.000Z'
     marketplace_ids = [ENV['MARKETPLACE_ID']]
 
@@ -64,7 +64,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
     lines[1..].each do |line|
       values = line.split("\t")
-      listing_id = values[header.index('sku')]
+      listing_id = values[header.index('item-name')]
       data_hash = {}
 
       header.each_with_index do |key, index|
