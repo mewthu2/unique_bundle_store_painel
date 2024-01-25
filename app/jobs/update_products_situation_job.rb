@@ -44,7 +44,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
       p(status.body)
       p('Relatório ainda não concluído. Aguardando 10 segundos antes de verificar novamente...')
-      sleep(10)
+      sleep(5)
     end
   end
 
@@ -101,8 +101,8 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
   def search_order_metrics
     Product.all.each do |prd|
-      p('sleeping for 2 seconds...')
-      sleep(2.seconds)
+      p('sleeping for 1 second...')
+      sleep(1.second)
       p('i woke up, give me a time on saturday ok? 100km again? lets go!, search_order_metrics')
       end_date = DateTime.now
       start_date = end_date - 29
@@ -138,8 +138,8 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
   def update_fba_products
     Product.where(fulfillment_channel: 'FBA').each do |pfba|
-      p('sleeping a couple... 2 seconds')
-      sleep(2.seconds)
+      p('sleeping a couple... 1 second')
+      sleep(1.second)
       p('i woke up, omg this shits never ends, updating attributes of fba products')
       request_params = {
         details: true,
