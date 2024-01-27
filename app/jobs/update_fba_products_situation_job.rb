@@ -28,6 +28,7 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
         query: request_params,
         headers: { 'x-amz-access-token' => @access_token }
       )
+      next unless response['payload'].present?
 
       pfba.update(pending_customer_order_quantity: response['payload']['inventorySummaries'][0]['inventoryDetails']['reservedQuantity']['pendingCustomerOrderQuantity'],
                   quantity: response['payload']['inventorySummaries'][0]['totalQuantity'])
