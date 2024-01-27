@@ -11,7 +11,7 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   def update_fba_products
     Product.where(fulfillment_channel: 'FBA').each do |pfba|
       p('sleeping a couple... 500 mili second')
-      sleep(0.5.seconds)
+      sleep(1.seconds)
       p('i woke up, omg this shits never ends, updating attributes of fba products')
       request_params = {
         details: true,
@@ -28,7 +28,6 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
         query: request_params,
         headers: { 'x-amz-access-token' => @access_token }
       )
-      next unless response['payload'].present?
 
       pfba.update(pending_customer_order_quantity: response['payload']['inventorySummaries'][0]['inventoryDetails']['reservedQuantity']['pendingCustomerOrderQuantity'],
                   quantity: response['payload']['inventorySummaries'][0]['totalQuantity'])
