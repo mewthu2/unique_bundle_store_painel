@@ -14,6 +14,7 @@ class DashboardController < ApplicationController
     @products = Product.search(params[:search])
                        .by_fulfillment_channel(params[:fulfillment_channel])
                        .by_status(params[:status])
+                       .by_active(params[:active])
                        .paginate(page: params[:page], per_page: params_per_page(params[:per_page]))
   end
 end
