@@ -5,8 +5,8 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="col-1">
-          <div class="btn-group" style="margin-top:23px;" role="group">
+        <div class="col-2">
+          <div class="btn-group d-flex justify-content-center" style="margin-top:23px;" role="group">
             <%= link_to dashboard_index_path(status: 'positive'), class: 'btn btn-success text-light' do %> <i class="fas fa-check"></i><% end %>
             <%= link_to dashboard_index_path(status: 'negative'), class: 'btn btn-danger text-light' do %> <i class="fas fa-times"></i><% end %>
           </div>
@@ -15,7 +15,7 @@
           <%= label_tag :fulfillment_channel, 'Armazém' %>
           <%= select_tag :fulfillment_channel, options_for_select(['FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: true, class: 'form-control chosen-select' %>
         </div>
-        <div class="col-7">
+        <div class="col-6">
           <%= label_tag :search, 'Procurar' %>
           <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar' %>
         </div>
@@ -28,7 +28,8 @@
       </div>
     </div>
     <div class="card-footer">
-      <%= button_tag class: 'btn btn-secondary text-info w-100', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
+      <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
+      <%= button_tag formaction: generate_spreadsheet_dashboard_index_path, formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha <% end %>
     </div>
   </div>
 <% end %>
