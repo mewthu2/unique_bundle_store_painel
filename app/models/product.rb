@@ -6,30 +6,52 @@ class Product < ApplicationRecord
 
   # Escopos
 
-  add_scope :by_fulfillment_channel do |value|
-    where(fulfillment_channel: value) if value.present?
-  end
-  add_scope :by_status do |value|
-    case value
-    when 'positive'
-      where('resolver_stock < ?', 0)
-    when 'negative'
-      where('resolver_stock >= ?', 0)
+  add_scope :by_active do |value|
+    if value.present?
+      case value
+      when 'Todos'
+        all
+      when 'sim'
+        where(status: 'Active')
+      when 'nao'
+        where.not(status: 'Active')
+      end
     end
   end
 
-  add_scope :see_rules do |value|
-    where(status: 'Active') unless value.present?
+  add_scope :by_fulfillment_channel do |value|
+    if value.present?
+      if value == 'Todos'
+        all
+      else
+        where(fulfillment_channel: value)
+      end
+    end
+  end
+
+  add_scope :by_status do |value|
+    if value.present?
+      case value
+      when 'positive'
+        where('resolver_stock < ?', 0)
+      when 'negative'
+        where('resolver_stock >= ?', 0)
+      when 'Todos'
+        all
+      end
+    end
   end
 
   add_scope :search do |value|
-    where('products.seller_sku LIKE :valor OR
-           products.asin1 LIKE :valor OR
-           products.listing_id LIKE :valor OR
-           products.id_product LIKE :valor OR
-           products.item_name LIKE :valor OR
-           products.item_description LIKE :valor OR
-           products.id LIKE :valor', valor: "#{value}%")
+    if value.present?
+      where('products.seller_sku LIKE :valor OR
+            products.asin1 LIKE :valor OR
+            products.listing_id LIKE :valor OR
+            products.id_product LIKE :valor OR
+            products.item_name LIKE :valor OR
+            products.item_description LIKE :valor OR
+            products.id LIKE :valor', valor: "#{value}%")
+    end
   end
   # Metodos estaticos
   # Metodos publicos

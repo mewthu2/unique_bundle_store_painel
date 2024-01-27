@@ -1,4 +1,4 @@
-<%= form_tag(dashboard_index_path, method: 'get') do %>
+<%= form_tag(dashboard_index_path, method: 'get', id: 'search-form' ) do %>
   <div class="card mb-lg advanced-search-form bg-dark text-light" id="filters">
     <div class="card-header text-info d-flex justify-content-center">
       Pesquisa avançada
@@ -6,24 +6,20 @@
     <div class="card-body">
       <div class="row">
         <div class="col-2">
-          <div class="btn-group d-flex justify-content-center" style="margin-top:23px;" role="group">
-            <%= link_to dashboard_index_path(status: 'positive'), class: 'btn btn-success text-light' do %> <i class="fas fa-check"></i><% end %>
-            <%= link_to dashboard_index_path(status: 'negative'), class: 'btn btn-danger text-light' do %> <i class="fas fa-times"></i><% end %>
-          </div>
+          <%= label_tag :status, 'Estoque' %>
+          <%= select_tag :status, options_for_select(['Todos','positive','negative'].map{|v| [v]}, params[:status]), include_blank: false, class: 'form-control chosen-select' %>
         </div>
         <div class="col-2">
           <%= label_tag :fulfillment_channel, 'Armazém' %>
-          <%= select_tag :fulfillment_channel, options_for_select(['FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: true, class: 'form-control chosen-select' %>
+          <%= select_tag :fulfillment_channel, options_for_select(['Todos','FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: false, class: 'form-control chosen-select' %>
+        </div>
+        <div class="col-2">
+          <%= label_tag :active, 'Ativo?' %>
+          <%= select_tag :active, options_for_select(['Todos','sim','nao'].map{|v| [v]}, params[:active]), include_blank: false, class: 'form-control chosen-select' %>
         </div>
         <div class="col-6">
           <%= label_tag :search, 'Procurar' %>
-          <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar' %>
-        </div>
-        <div class="col-2" style="margin-top:27px;">
-          <span class="badge bg-secondary w-100">
-            <%= label_tag :all, 'Incluir inativos' %>
-            <%= check_box_tag :all, 'todos', params[:all] == 'todos', class: 'form-check-input' %>
-          </span>
+          <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
         </div>
       </div>
     </div>
@@ -88,5 +84,10 @@
   $(document).ready(function() {
       $('.table').DataTable();
   });
+
+  $('#filters select').on('input', function () {
+    $('form#search-form').submit();
+  });
+
 </script>
 <%= will_paginate @products, list_classes: %w[pagination justify-content-center mt-lg], inner_window: 1 %>
