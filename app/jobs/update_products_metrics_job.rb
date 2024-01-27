@@ -9,7 +9,7 @@ class UpdateProductsMetricsJob < ActiveJob::Base
   def search_order_metrics
     Product.all.each do |prd|
       p('sleeping for 500 mili seconds...')
-      sleep(1.seconds)
+      sleep(2.seconds)
       p('i woke up, give me a time on saturday ok? 100km again? lets go!, search_order_metrics')
       end_date = DateTime.now
       start_date = end_date - 29
