@@ -30,6 +30,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
     }
 
     reports_uri = "#{ENV['ENDPOINT_AMAZON']}/reports/2021-06-30/reports"
+    
     HTTParty.post(reports_uri, body: report_params.to_json,
                                headers: { 'Content-Type' => 'application/json',
                                           'x-amz-access-token' => @access_token })
@@ -62,7 +63,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
     result_hash = {}
 
-    lines[1..].each do |line|
+    result_hash = lines[1..].map do |line|
       values = line.split("\t")
       listing_id = values[header.index('item-name')]
       data_hash = {}
@@ -182,6 +183,6 @@ class UpdateProductsSituationJob < ActiveJob::Base
       client_secret: ENV['LWA_CLIENT_SECRET']
     }
     token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
-    JSON.parse(token_response.body)['access_token']
+    @access_token = JSON.parse(token_response.body)['access_token']
   end
 end
