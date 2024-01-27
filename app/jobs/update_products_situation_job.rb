@@ -30,7 +30,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
     }
 
     reports_uri = "#{ENV['ENDPOINT_AMAZON']}/reports/2021-06-30/reports"
-    
+
     HTTParty.post(reports_uri, body: report_params.to_json,
                                headers: { 'Content-Type' => 'application/json',
                                           'x-amz-access-token' => @access_token })
@@ -61,9 +61,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
     header = lines.first.split("\t")
 
-    result_hash = {}
-
-    result_hash = lines[1..].map do |line|
+    lines[1..].map do |line|
       values = line.split("\t")
       listing_id = values[header.index('item-name')]
       data_hash = {}
@@ -72,28 +70,28 @@ class UpdateProductsSituationJob < ActiveJob::Base
         data_hash[key] = values[index]
       end
 
-      result_hash[listing_id] = data_hash
+      [listing_id, data_hash]
     end
   end
 
   def create_update_products(result_hash)
     result_hash.each do |data|
-      product = Product.find_or_initialize_by(id_product: data['product-id'])
+      product = Product.find_or_initialize_by(id_product: data[0]['product-id'])
 
       product.update(
-        item_name: data['item-name'],
-        item_description: data['item-description'],
-        listing_id: data['listing-id'],
-        seller_sku: data['seller-sku'],
-        price: data['price'],
-        quantity: data['quantity'],
-        product_id_type: data['product-id-type'],
-        asin1: data['asin1'],
-        asin2: data['asin2'],
-        asin3: data['asin3'],
-        fulfillment_channel: (data['fulfillment-channel'] == 'DEFAULT' ? 'FBM' : 'FBA'),
-        id_product: data['product-id'],
-        status: data['status']
+        item_name: data[0]['item-name'],
+        item_description: data[0]['item-description'],
+        listing_id: data[0]['listing-id'],
+        seller_sku: data[0]['seller-sku'],
+        price: data[0]['price'],
+        quantity: data[0]['quantity'],
+        product_id_type: data[0]['product-id-type'],
+        asin1: data[0]['asin1'],
+        asin2: data[0]['asin2'],
+        asin3: data[0]['asin3'],
+        fulfillment_channel: (data[0]['fulfillment-channel'] == 'DEFAULT' ? 'FBM' : 'FBA'),
+        id_product: data[0]['product-id'],
+        status: data[0]['status']
       )
 
       product.save
@@ -122,10 +120,12 @@ class UpdateProductsSituationJob < ActiveJob::Base
       response = HTTParty.get(order_metrics_uri, query: request_params,
                                                  headers: { 'x-amz-access-token' => @access_token })
 
-      parsed_response = JSON.parse(response.body)
+      parsed_response = JSON.parse(responses.body)
 
       total_unit_count = 0
       total_sales_amount = 0.0
+
+      next unless parsed_response['payload'].present?
 
       parsed_response['payload'].each do |item|
         total_unit_count += item['unitCount']
@@ -133,7 +133,6 @@ class UpdateProductsSituationJob < ActiveJob::Base
       end
 
       prd.update(total_unit_count:, total_sales_amount:)
-      p(prd)
     end
   end
 
@@ -183,6 +182,6 @@ class UpdateProductsSituationJob < ActiveJob::Base
       client_secret: ENV['LWA_CLIENT_SECRET']
     }
     token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
-    @access_token = JSON.parse(token_response.body)['access_token']
+    JSON.parse(token_response.body)['access_token']
   end
 end
