@@ -120,7 +120,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
       response = HTTParty.get(order_metrics_uri, query: request_params,
                                                  headers: { 'x-amz-access-token' => @access_token })
 
-      parsed_response = JSON.parse(responses.body)
+      parsed_response = JSON.parse(response.body)
 
       total_unit_count = 0
       total_sales_amount = 0.0
