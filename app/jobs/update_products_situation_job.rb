@@ -76,25 +76,22 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
   def create_update_products(result_hash)
     result_hash.each do |data|
-      product = Product.find_or_initialize_by(id_product: data[0]['product-id'])
-
+      product = Product.find_or_create_by(id_product: data[1]['seller-sku'])
       product.update(
-        item_name: data[0]['item-name'],
-        item_description: data[0]['item-description'],
-        listing_id: data[0]['listing-id'],
-        seller_sku: data[0]['seller-sku'],
-        price: data[0]['price'],
-        quantity: data[0]['quantity'],
-        product_id_type: data[0]['product-id-type'],
-        asin1: data[0]['asin1'],
-        asin2: data[0]['asin2'],
-        asin3: data[0]['asin3'],
-        fulfillment_channel: (data[0]['fulfillment-channel'] == 'DEFAULT' ? 'FBM' : 'FBA'),
-        id_product: data[0]['product-id'],
-        status: data[0]['status']
+        item_name: data[1]['item-name'],
+        item_description: data[1]['item-description'],
+        listing_id: data[1]['listing-id'],
+        seller_sku: data[1]['seller-sku'],
+        price: data[1]['price'],
+        quantity: data[1]['quantity'],
+        product_id_type: data[1]['product-id-type'],
+        asin1: data[1]['asin1'],
+        asin2: data[1]['asin2'],
+        asin3: data[1]['asin3'],
+        fulfillment_channel: (data[1]['fulfillment-channel'] == 'DEFAULT' ? 'FBM' : 'FBA'),
+        id_product: data[1]['product-id'],
+        status: data[1]['status']
       )
-
-      product.save
     end
   end
 
