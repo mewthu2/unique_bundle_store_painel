@@ -3,26 +3,27 @@
     <div class="card-header text-info d-flex justify-content-center">
       Pesquisa avançada
     </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-2">
-          <%= label_tag :status, 'Estoque' %>
-          <%= select_tag :status, options_for_select(['Todos','positive','negative'].map{|v| [v]}, params[:status]), include_blank: false, class: 'form-control chosen-select' %>
+   <div class="card-body">
+    <div class="row">
+        <div class="col-6 col-md-2">
+            <%= label_tag :status, 'Estoque' %>
+            <%= select_tag :status, options_for_select(['Todos','positive','negative'].map{|v| [v]}, params[:status]), include_blank: false, class: 'form-control chosen-select' %>
         </div>
-        <div class="col-2">
-          <%= label_tag :fulfillment_channel, 'Armazém' %>
-          <%= select_tag :fulfillment_channel, options_for_select(['Todos','FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: false, class: 'form-control chosen-select' %>
+        <div class="col-6 col-md-2">
+            <%= label_tag :fulfillment_channel, 'Armazém' %>
+            <%= select_tag :fulfillment_channel, options_for_select(['Todos','FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: false, class: 'form-control chosen-select' %>
         </div>
-        <div class="col-2">
-          <%= label_tag :active, 'Ativo?' %>
-          <%= select_tag :active, options_for_select(['Todos','sim','nao'].map{|v| [v]}, params[:active]), include_blank: false, class: 'form-control chosen-select' %>
+        <div class="col-6 col-md-2">
+            <%= label_tag :active, 'Ativo?' %>
+            <%= select_tag :active, options_for_select(['Todos','sim','nao'].map{|v| [v]}, params[:active]), include_blank: false, class: 'form-control chosen-select' %>
         </div>
-        <div class="col-6">
-          <%= label_tag :search, 'Procurar' %>
-          <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
+        <div class="col-12 col-md-6">
+            <%= label_tag :search, 'Procurar' %>
+            <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
         </div>
-      </div>
     </div>
+</div>
+
     <div class="card-footer">
       <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
       <%= button_tag formaction: generate_spreadsheet_dashboard_index_path, formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha <% end %>

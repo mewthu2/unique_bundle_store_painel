@@ -7,7 +7,7 @@ ruby "3.1.3"
 gem 'rubyXL'
 
 # Use mysql as the database for Active Record
-gem 'mysql2', require: false
+gem 'mysql2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.6"
