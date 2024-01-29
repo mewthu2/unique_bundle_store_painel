@@ -1,6 +1,5 @@
 class ProductPreparation < ApplicationRecord
   # Callbacks
-  after_commit :resolve_stock
   # Associacoes
   belongs_to :product
   # Validacoes
@@ -10,9 +9,6 @@ class ProductPreparation < ApplicationRecord
   # Metodos estaticos
   # Metodos publicos
 
-  def resolve_stock
-    product.update(resolver_stock: product.resolver_stock - quantity)
-  end
   # Metodos GET
   # Metodos SET
 

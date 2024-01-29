@@ -40,11 +40,8 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
       b = product.pending_customer_order_quantity.to_i
       c = product.quantity.to_i
       totalx = b - c
-      if pp = ProductPreparation.find_by(product: product)
-        product.update(resolver_stock: a + totalx - pp.quantity)
-      else
-        product.update(resolver_stock: a + totalx)
-      end
+
+      product.update(resolver_stock: a + totalx)
     end
   end
 
