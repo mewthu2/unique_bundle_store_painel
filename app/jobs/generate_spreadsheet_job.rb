@@ -26,13 +26,13 @@ class GenerateSpreadsheetJob < ApplicationJob
       tab.add_cell(col, 12, data.fulfillment_channel)
       tab.add_cell(col, 13, data.total_unit_count)
       tab.add_cell(col, 14, data.total_sales_amount)
-      tab.add_cell(col, 13, data.total_unit_count_7)
-      tab.add_cell(col, 14, data.total_sales_amount_7)
-      tab.add_cell(col, 15, data.resolver_stock)
-      tab.add_cell(col, 16, data.supplier_url)
-      tab.add_cell(col, 17, data.pending_customer_order_quantity)
-      tab.add_cell(col, 18, data.created_at.strftime('%d/%m/%Y'))
-      tab.add_cell(col, 19, data.updated_at.strftime('%d/%m/%Y'))
+      tab.add_cell(col, 15, data.total_unit_count_7)
+      tab.add_cell(col, 16, data.total_sales_amount_7)
+      tab.add_cell(col, 17, data.resolver_stock)
+      tab.add_cell(col, 18, data.supplier_url)
+      tab.add_cell(col, 19, data.pending_customer_order_quantity)
+      tab.add_cell(col, 20, data.created_at.strftime('%d/%m/%Y'))
+      tab.add_cell(col, 21, data.updated_at.strftime('%d/%m/%Y'))
     end
 
     workbook.stream.read
