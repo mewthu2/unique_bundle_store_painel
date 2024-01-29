@@ -9,10 +9,13 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   end
 
   def update_fba_products
-    Product.where(fulfillment_channel: 'FBA').each do |pfba|
-      p('sleeping a couple... 500 mili second')
-      sleep(1.seconds)
-      p('i woke up, omg this shits never ends, updating attributes of fba products')
+    @total = Product.where(fulfillment_channel: 'Active').count
+
+    Product.where(fulfillment_channel: 'Active').each_with_index do |prd, index|
+      p('sleeping for 2 seconds...')
+      sleep(2.seconds)
+      puts("Processando produto #{index + 1} de #{@total}: #{prd.id}")
+
       request_params = {
         details: true,
         granularityType: 'Marketplace',

@@ -8,10 +8,11 @@ class UpdateProductsMetricsJob < ActiveJob::Base
   end
 
   def search_order_metrics(days)
-    Product.where(status: 'Active').each do |prd|
-      p('sleeping for 500 mili seconds...')
+    @total = Product.where(status: 'Active').count
+    Product.where(status: 'Active').each_with_index do |prd, index|
+      p('sleeping for 2 seconds...')
       sleep(2.seconds)
-      p('i woke up, give me a time on saturday ok? 100km again? lets go!, search_order_metrics')
+      puts("Processando produto #{index + 1} de #{@total}: #{prd.id}")
       end_date = DateTime.now
       start_date = end_date - days
 
@@ -56,6 +57,6 @@ class UpdateProductsMetricsJob < ActiveJob::Base
       client_secret: ENV['LWA_CLIENT_SECRET']
     }
     token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
-    JSON.parse(token_response.body)['access_token']
+    @access_token = JSON.parse(token_response.body)['access_token']
   end
 end
