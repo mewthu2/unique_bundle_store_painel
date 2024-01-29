@@ -1,0 +1,64 @@
+<% title 'Preparações de Envio' %>
+
+<%= form_tag(dashboard_index_path, method: 'get', id: 'search-form' ) do %>
+  <div class="card mb-lg advanced-search-form bg-dark text-light" id="filters">
+    <div class="card-header text-info d-flex justify-content-center">
+      Pesquisa avançada
+    </div>
+   <div class="card-body">
+    <div class="row">
+     
+    </div>
+  </div>
+  <div class="card-footer">
+    <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
+    <%= link_to new_product_preparation_path, class: 'btn btn-primary' do %> <i class="fas fa-plus"></i> Nova Prepração de Envio <% end %>
+  </div>
+<% end %>
+
+<div class="row">
+  <div class="col-12">
+    <table class="table table-dark table-hover table-responsive table-striped" style="overflow-x: scroll;" id="product_preparations-table">
+      <thead>
+        <tr>
+          <th class="text-center"><i class="fa fa-ellipsis-v"></i></th>
+          <th class="text-center"><%= 'SKU' %></th>
+          <th class="text-center"><%= 'Estoque' %></th>
+          <th class="text-center"><%= 'Última atualização' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @product_preparations.each do |product_preparation| %>
+          <tr>
+            <td class="text-center">
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <%= link_to edit_product_preparation_path(id: product_preparation.id), class: 'btn btn-light btn-sm text-dark' do %> <i class="fas fa-edit"></i><% end %>
+              </div>
+            </td>
+            <td class="text-center"><%= product_preparation.product.seller_sku %></td>
+            <td class="text-center"><%= product_preparation.quantity %></td>
+            <td class="text-center"><%= product_preparation.updated_at.strftime('%d/%m/%Y %H:%M') %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="12">
+            <%= page_entries_info @product_preparations %>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+      $('.table').DataTable();
+  });
+
+  $('#filters select').on('input', function () {
+    $('form#search-form').submit();
+  });
+
+</script>
+<%= will_paginate @products, list_classes: %w[pagination justify-content-center mt-lg], inner_window: 1 %>

@@ -19,6 +19,20 @@
             <% end %>
           </div>
         </div>
+
+        <a class="btn btn-dark text-light mb-3" data-bs-toggle="collapse" href="#collase-stock" role="button" aria-expanded="false" aria-controls="collase-dashboard">
+          <i class="fa-solid fa-truck-ramp-box"></i> <span class="name-button"> Estoque </span><i class="fa fa-angle-down arrow"></i>
+        </a>
+        <div class="justify-content-center flex-column mb-auto collapse mb-3" id="collase-stock">
+          <div class="mb-3 col-icon"> 
+            <%= link_to product_preparations_path, class: 'text-light link' do %>
+              <i class="fa-regular fa-paper-plane text-info"></i>
+              <span class="name-col">
+                Preparação de Envio
+              </span>
+            <% end %>
+          </div>
+        </div>
       </ul>
     </div>
   </div>

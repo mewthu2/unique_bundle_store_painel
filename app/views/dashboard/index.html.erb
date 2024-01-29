@@ -1,3 +1,5 @@
+<% title 'Acompanhamento de Envios' %>
+
 <%= form_tag(dashboard_index_path, method: 'get', id: 'search-form' ) do %>
   <div class="card mb-lg advanced-search-form bg-dark text-light" id="filters">
     <div class="card-header text-info d-flex justify-content-center">
@@ -23,13 +25,11 @@
       </div>
     </div>
   </div>
-</div>
-
-    <div class="card-footer">
-      <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
-      <%= button_tag formaction: generate_spreadsheet_dashboard_index_path, formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha <% end %>
-    </div>
+  <div class="card-footer">
+    <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
+    <%= button_tag formaction: generate_spreadsheet_dashboard_index_path, formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha <% end %>
   </div>
+</div>
 <% end %>
 
 <div class="row">

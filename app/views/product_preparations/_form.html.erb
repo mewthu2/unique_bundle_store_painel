@@ -1,0 +1,36 @@
+<%= form_for(product_preparation, html: { autocomplete: 'off' }, data: { disabled: read_only }) do |form| %>
+  <div class="page-header">
+    <h4>Editar Preparação de Envio<small class="text-light">Dados sobre a preparação de envio</small></h4>
+  </div>
+
+  <div class="row">
+    <% unless form.object.persisted? %>
+      <div class="col-2">
+        <%= form.label :product_id, 'Escolha o produto', class: 'col-form-label text-primary' %>
+      </div>
+      <div class="col-4">
+        <%= form.select :product_id, options_for_select(@products_without_preparation.map { |o| [o.seller_sku, o.id] }), {}, class: 'form-control chosen-select', required: true %>
+      </div>
+    <% else %>
+      <div class="col-2">
+        <%= form.label :product_id, 'Produto Selecionado:', class: 'col-form-label text-primary' %>
+      </div>
+      <div class="col-2 badge bg-primary">
+        <b><h5><%= form.object.product.seller_sku %></h5></b>
+      </div>
+      <div class="col-1">
+        <%= form.label :quantity, 'Quantidade', class: 'col-form-label text-primary' %>
+      </div>
+      <div class="col-6">
+        <%= form.text_field :quantity, class: 'form-control' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="panel-buttons bg-dark">
+    <%= link_to product_preparations_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> Voltar <% end %>
+    <% unless read_only %>
+      <%= form.button class: 'btn btn-primary btn-lg', data: { disable_with: 'Salvando...' } do %><i class="fa fa-check"></i> Salvar <% end %>
+    <% end %>
+  </div>
+<% end %>

@@ -35,12 +35,16 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   end
 
   def resolver_stock
-    Product.all.each do |product|
+    Product.where(status: 'Active').all.each do |product|
       a = product.total_unit_count.to_i
       b = product.pending_customer_order_quantity.to_i
       c = product.quantity.to_i
       totalx = b - c
-      product.update(resolver_stock: a + totalx)
+      if pp = ProductPreparation.find_by(product: product)
+        product.update(resolver_stock: a + totalx - pp.quantity)
+      else
+        product.update(resolver_stock: a + totalx)
+      end
     end
   end
 

@@ -8,7 +8,7 @@ class UpdateProductsMetricsJob < ActiveJob::Base
   end
 
   def search_order_metrics(days)
-    Product.all.each do |prd|
+    Product.where(status: 'Active').each do |prd|
       p('sleeping for 500 mili seconds...')
       sleep(2.seconds)
       p('i woke up, give me a time on saturday ok? 100km again? lets go!, search_order_metrics')
@@ -38,7 +38,7 @@ class UpdateProductsMetricsJob < ActiveJob::Base
         total_unit_count += item['unitCount']
         total_sales_amount += item['totalSales']['amount'].to_f
       end
-      if days == 7
+      if days == 6
         prd.update(total_unit_count_7: total_unit_count, total_sales_amount_7: total_sales_amount)
       else
         prd.update(total_unit_count:, total_sales_amount:)
