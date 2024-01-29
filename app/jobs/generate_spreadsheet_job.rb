@@ -7,7 +7,7 @@ class GenerateSpreadsheetJob < ApplicationJob
     tab = workbook.worksheets[0]
     tab.sheet_name = 'Product Spreadsheet'
 
-    header = ['Item Name', 'Item Description', 'Listing ID', 'Seller SKU', 'Price', 'Quantity', 'Product ID Type', 'ASIN1', 'ASIN2', 'ASIN3', 'ID Product', 'Status', 'Fulfillment Channel', 'Total Unit Count', 'Total Sales Amount', 'Resolver Stock', 'Supplier URL', 'Pending Customer Order Quantity', 'Created At', 'Updated At']
+    header = ['Item Name', 'Item Description', 'Listing ID', 'Seller SKU', 'Price', 'Quantity', 'Product ID Type', 'ASIN1', 'ASIN2', 'ASIN3', 'ID Product', 'Status', 'Fulfillment Channel', 'Total Unit Count 30 days', 'Total Sales Amount 30 days', 'Total Unit Count 7 days', 'Total Sales Amount 7 days', 'Resolver Stock', 'Supplier URL', 'Pending Customer Order Quantity', 'Created At', 'Updated At']
     header.each.with_index(0) { |data, row| tab.add_cell(0, row, data) }
 
     products.each.with_index(1) do |data, col|
@@ -26,6 +26,8 @@ class GenerateSpreadsheetJob < ApplicationJob
       tab.add_cell(col, 12, data.fulfillment_channel)
       tab.add_cell(col, 13, data.total_unit_count)
       tab.add_cell(col, 14, data.total_sales_amount)
+      tab.add_cell(col, 13, data.total_unit_count_7)
+      tab.add_cell(col, 14, data.total_sales_amount_7)
       tab.add_cell(col, 15, data.resolver_stock)
       tab.add_cell(col, 16, data.supplier_url)
       tab.add_cell(col, 17, data.pending_customer_order_quantity)
