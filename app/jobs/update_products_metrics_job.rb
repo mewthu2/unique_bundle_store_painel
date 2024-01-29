@@ -1,10 +1,10 @@
 class UpdateProductsMetricsJob < ActiveJob::Base
-  def perform
+  def perform(days_param)
     # STEP1=obtain acess token
     @access_token = obtain_acess_token
     # STEP6=obtain last 30 days sells
-    search_order_metrics(29)
-    search_order_metrics(6)
+    search_order_metrics(days_param)
+    search_order_metrics(days_param)
   end
 
   def search_order_metrics(days)
