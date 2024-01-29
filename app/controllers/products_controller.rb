@@ -55,6 +55,8 @@ class ProductsController < ApplicationController
                   :fulfillment_channel,
                   :total_unit_count,
                   :total_sales_amount,
+                  :total_unit_count_7,
+                  :total_sales_amount_7,
                   :resolver_stock,
                   :supplier_url,
                   :pending_customer_order_quantity

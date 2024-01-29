@@ -5,23 +5,24 @@
     </div>
    <div class="card-body">
     <div class="row">
-        <div class="col-6 col-md-2">
-            <%= label_tag :status, 'Estoque' %>
-            <%= select_tag :status, options_for_select(['Todos','positivo','negativo'].map{|v| [v]}, params[:status]), include_blank: false, class: 'form-control chosen-select' %>
-        </div>
-        <div class="col-6 col-md-2">
-            <%= label_tag :fulfillment_channel, 'Armazém' %>
-            <%= select_tag :fulfillment_channel, options_for_select(['Todos','FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: false, class: 'form-control chosen-select' %>
-        </div>
-        <div class="col-6 col-md-2">
-            <%= label_tag :active, 'Ativo?' %>
-            <%= select_tag :active, options_for_select(['Todos','sim','nao'].map{|v| [v]}, params[:active]), include_blank: false, class: 'form-control chosen-select' %>
-        </div>
-        <div class="col-12 col-md-6">
-            <%= label_tag :search, 'Procurar' %>
-            <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
-        </div>
+      <div class="col-6 col-md-2">
+        <%= label_tag :status, 'Estoque' %>
+        <%= select_tag :status, options_for_select(['Todos','positivo','negativo'].map{|v| [v]}, params[:status]), include_blank: false, class: 'form-control chosen-select' %>
+      </div>
+      <div class="col-6 col-md-2">
+        <%= label_tag :fulfillment_channel, 'Armazém' %>
+        <%= select_tag :fulfillment_channel, options_for_select(['Todos','FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: false, class: 'form-control chosen-select' %>
+      </div>
+      <div class="col-6 col-md-2">
+        <%= label_tag :active, 'Ativo?' %>
+        <%= select_tag :active, options_for_select(['Todos','sim','nao'].map{|v| [v]}, params[:active]), include_blank: false, class: 'form-control chosen-select' %>
+      </div>
+      <div class="col-12 col-md-6">
+        <%= label_tag :search, 'Procurar' %>
+        <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
+      </div>
     </div>
+  </div>
 </div>
 
     <div class="card-footer">
@@ -41,6 +42,7 @@
           <th class="text-center"><%= 'Armazém' %></th>
           <th class="text-center"><%= 'Estoque' %></th>
           <th class="text-center"><%= 'Últimos 30 dias Vendas' %></th>
+          <th class="text-center"><%= 'Últimos 7 dias Vendas' %></th>
           <th class="text-center"><%= 'Nome do Item' %></th>
           <th class="text-center"><%= 'SKU' %></th>
           <th class="text-center"><%= 'Preço Unitário' %></th>
@@ -63,6 +65,7 @@
             <td class="text-center"><%= product.fulfillment_channel == 'FBA' ? %(<span class="badge bg-primary"><i class="fa-brands fa-amazon"></i> FBA</span>).html_safe : %(<span class="badge bg-secondary"><i class="fas fa-globe-americas"></i> FBM</span>).html_safe %></td>
             <td class="text-center table-<%= product.resolver_stock.to_i < 0 ? 'success' : 'danger' %>"><h5><%= product.resolver_stock %></h5></td>
             <td class="text-center"><%= product.total_unit_count %></td>
+            <td class="text-center"><%= product.total_unit_count_7 %></td>
             <td class="text-center"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
             <td class="text-center"><%= product.seller_sku %></td>
             <td class="text-center">$ <%= product.price %></td>

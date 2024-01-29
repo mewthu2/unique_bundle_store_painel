@@ -98,6 +98,17 @@
       <%= form.text_field :pending_customer_order_quantity, class: 'form-control' %>
     </div>
   </div>
+
+  <div class="row">
+   <%= form.label 'Vendas_7_v', class: 'col-1 col-form-label text-right' %>
+    <div class="col-3">
+      <%= form.text_field :total_sales_amount_7, class: 'form-control' %>
+    </div>
+    <%= form.label 'Vendas_30_u', class: 'col-1 col-form-label text-right' %>
+    <div class="col-3">
+      <%= form.text_field :total_unit_count_7, class: 'form-control' %>
+    </div>
+  </div>
   
   <div class="panel-buttons bg-dark">
     <%= link_to dashboard_index_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> Voltar <% end %>
