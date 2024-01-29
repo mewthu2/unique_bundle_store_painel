@@ -20,7 +20,7 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
         details: true,
         granularityType: 'Marketplace',
         granularityId: ENV['MARKETPLACE_ID'],
-        sellerSkus: pfba.seller_sku,
+        sellerSkus: prd.seller_sku,
         marketplaceIds: ENV['MARKETPLACE_ID']
       }
 
@@ -32,8 +32,8 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
         headers: { 'x-amz-access-token' => @access_token }
       )
 
-      pfba.update(pending_customer_order_quantity: response['payload']['inventorySummaries'][0]['inventoryDetails']['reservedQuantity']['pendingCustomerOrderQuantity'],
-                  quantity: response['payload']['inventorySummaries'][0]['totalQuantity'])
+      prd.update(pending_customer_order_quantity: response['payload']['inventorySummaries'][0]['inventoryDetails']['reservedQuantity']['pendingCustomerOrderQuantity'],
+                 quantity: response['payload']['inventorySummaries'][0]['totalQuantity'])
     end
   end
 
