@@ -3,16 +3,17 @@ class UpdateProductsMetricsJob < ActiveJob::Base
     # STEP1=obtain acess token
     @access_token = obtain_acess_token
     # STEP6=obtain last 30 days sells
-    search_order_metrics
+    search_order_metrics(29)
+    search_order_metrics(6)
   end
 
-  def search_order_metrics
+  def search_order_metrics(days)
     Product.all.each do |prd|
       p('sleeping for 500 mili seconds...')
       sleep(2.seconds)
       p('i woke up, give me a time on saturday ok? 100km again? lets go!, search_order_metrics')
       end_date = DateTime.now
-      start_date = end_date - 29
+      start_date = end_date - days
 
       formatted_start_date = start_date.iso8601
       formatted_end_date = end_date.iso8601
@@ -37,8 +38,11 @@ class UpdateProductsMetricsJob < ActiveJob::Base
         total_unit_count += item['unitCount']
         total_sales_amount += item['totalSales']['amount'].to_f
       end
-
-      prd.update(total_unit_count:, total_sales_amount:)
+      if days == 7
+        prd.update(total_unit_count_7: total_unit_count, total_sales_amount_7: total_sales_amount)
+      else
+        prd.update(total_unit_count:, total_sales_amount:)
+      end
     end
   end
 

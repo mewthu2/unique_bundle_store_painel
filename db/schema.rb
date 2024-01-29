@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_25_010400) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_29_004229) do
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "item_name"
     t.text "item_description", size: :long
@@ -27,6 +27,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_25_010400) do
     t.string "fulfillment_channel"
     t.string "total_unit_count"
     t.string "total_sales_amount"
+    t.string "total_unit_count_7"
+    t.string "total_sales_amount_7"
     t.string "resolver_stock"
     t.string "supplier_url"
     t.string "pending_customer_order_quantity"

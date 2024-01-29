@@ -32,9 +32,9 @@ class Product < ApplicationRecord
   add_scope :by_status do |value|
     if value.present?
       case value
-      when 'positive'
+      when 'positivo'
         where('resolver_stock < ?', 0)
-      when 'negative'
+      when 'negativo'
         where('resolver_stock >= ?', 0)
       when 'Todos'
         all
