@@ -5,14 +5,14 @@
     </div>
   </div>
   <div class="navbar-content">
-    <%= yield :title %>
+    <b class="badge bg-secondary"><%= yield :title %></b>
   </div>
   <div class="navbar-dropdowns">
     <nav class="navbar navbar-expand-sm">
       <div class="dropdown" style="margin-top: 7px; margin-right: -12em;">
         <%= image_tag 'admin/usuario-200x200', style: 'width:10%; border-radius: 50%;' %>
-        <strong><%= current_user.name %></strong>
-        <%= link_to destroy_user_session_path(current_user), data: { turbo: :false } do %>Sair<% end %>
+        <strong class="badge bg-primary"><%= current_user.name %></strong>
+        <strong class="badge bg-danger"><i class="fa-solid fa-right-from-bracket"></i><%= link_to destroy_user_session_path(current_user), data: { turbo: :false } do %>Sair</strong><% end %>
       </div>
     </nav>
   </div>
