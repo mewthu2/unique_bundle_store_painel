@@ -9,9 +9,9 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   end
 
   def update_fba_products
-    @total = Product.where(fulfillment_channel: 'Active').count
+    @total = Product.where(fulfillment_channel: 'FBA').count
 
-    Product.where(fulfillment_channel: 'Active').each_with_index do |prd, index|
+    Product.where(fulfillment_channel: 'FBA').each_with_index do |prd, index|
       p('sleeping for 2 seconds...')
       sleep(2.seconds)
       puts("Processando produto #{index + 1} de #{@total}: #{prd.id}")
