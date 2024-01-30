@@ -31,9 +31,10 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
         query: request_params,
         headers: { 'x-amz-access-token' => @access_token }
       )
+      pending_customer_order_quantity = response&.dig('payload', 'inventorySummaries', 0, 'inventoryDetails', 'reservedQuantity')&.then { |details| details['pendingCustomerOrderQuantity'] }
 
-      prd.update(pending_customer_order_quantity: response.dig('payload', 'inventorySummaries', 0, 'inventoryDetails', 'reservedQuantity', 'pendingCustomerOrderQuantity'),
-                 quantity: response.dig('payload', 'inventorySummaries', 0, 'totalQuantity'))
+      prd.update(pending_customer_order_quantity:,
+                 quantity: response&.dig('payload', 'inventorySummaries', 0, 'totalQuantity'))
     end
   end
 
@@ -58,6 +59,6 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
       client_secret: ENV['LWA_CLIENT_SECRET']
     }
     token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
-    @access_token = JSON.parse(token_response.body)['access_token']
+    JSON.parse(token_response.body)['access_token']
   end
 end
