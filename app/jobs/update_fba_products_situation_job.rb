@@ -9,9 +9,11 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   end
 
   def update_fba_products
-    @total = Product.where(fulfillment_channel: 'FBA').count
+    products = Product.where(fulfillment_channel: 'FBA', status: 'Active').count
 
-    Product.where(fulfillment_channel: 'FBA').each_with_index do |prd, index|
+    @total = products.count
+
+    products.each_with_index do |prd, index|
       p('sleeping for 2 seconds...')
       sleep(2.seconds)
       puts("Processando produto #{index + 1} de #{@total}: #{prd.id}")
@@ -39,7 +41,7 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   end
 
   def resolver_stock
-    Product.where(status: 'Active').all.each do |product|
+    Product.where(status: 'Active', status: 'Active').all.each do |product|
       a = product.total_unit_count.to_i
       b = product.pending_customer_order_quantity.to_i
       c = product.quantity.to_i

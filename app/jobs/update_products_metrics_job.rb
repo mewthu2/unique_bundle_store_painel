@@ -8,8 +8,11 @@ class UpdateProductsMetricsJob < ActiveJob::Base
   end
 
   def search_order_metrics(days)
-    @total = Product.where(status: 'Active').count
-    Product.where(status: 'Active', fulfillment_channel: 'FBA').each_with_index do |prd, index|
+    products = Product.where(status: 'Active', fulfillment_channel: 'FBA')
+
+    @total = products.count
+
+    products.each_with_index do |prd, index|
       p('sleeping for 2 seconds...')
       sleep(2.seconds)
       puts("Processando produto #{index + 1} de #{@total}: #{prd.id}")
@@ -57,6 +60,6 @@ class UpdateProductsMetricsJob < ActiveJob::Base
       client_secret: ENV['LWA_CLIENT_SECRET']
     }
     token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
-    @access_token = JSON.parse(token_response.body)['access_token']
+    JSON.parse(token_response.body)['access_token']
   end
 end
