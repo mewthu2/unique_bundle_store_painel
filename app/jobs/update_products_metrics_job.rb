@@ -9,7 +9,7 @@ class UpdateProductsMetricsJob < ActiveJob::Base
 
   def search_order_metrics(days)
     @total = Product.where(status: 'Active').count
-    Product.where(status: 'Active').each_with_index do |prd, index|
+    Product.where(status: 'Active', fulfillment_channel: 'FBA').each_with_index do |prd, index|
       p('sleeping for 2 seconds...')
       sleep(2.seconds)
       puts("Processando produto #{index + 1} de #{@total}: #{prd.id}")
