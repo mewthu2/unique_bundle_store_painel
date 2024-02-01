@@ -9,7 +9,7 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   end
 
   def update_fba_products
-    products = Product.where(fulfillment_channel: 'FBA', status: 'Active').count
+    products = Product.where(fulfillment_channel: 'FBA', status: 'Active')
 
     @total = products.count
 
