@@ -53,7 +53,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @products.paginate(page: params[:page], per_page: 15).each do |product| %>
+        <% @products.each do |product| %>
           <tr>
             <td class="text-center">
               <input class="form-check-input" type="checkbox" name="product_checkbox" value="<%= product.supplier_url %>" />
@@ -82,7 +82,7 @@
       <tfoot>
         <tr>
           <th colspan="12">
-            <%= page_entries_info @products.paginate(page: params[:page], per_page: 15) %>
+            
           </th>
         </tr>
       </tfoot>
