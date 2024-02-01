@@ -1,14 +1,13 @@
 class UpdateProductsMetricsJob < ActiveJob::Base
-  def perform(days_param)
+  def perform(days_param, fulfillment_channel)
     # STEP1=obtain acess token
     @access_token = obtain_acess_token
     # STEP6=obtain last 30 days sells
-    search_order_metrics(days_param)
-    search_order_metrics(days_param)
+    search_order_metrics(days_param, fulfillment_channel)
   end
 
-  def search_order_metrics(days)
-    products = Product.where(status: 'Active', fulfillment_channel: 'FBA')
+  def search_order_metrics(days, fulfillment_channel)
+    products = Product.where(status: 'Active', fulfillment_channel:)
 
     @total = products.count
 
