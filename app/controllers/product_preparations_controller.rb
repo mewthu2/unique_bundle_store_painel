@@ -1,9 +1,9 @@
 class ProductPreparationsController < ApplicationController
   before_action :set_product_preparations, only: [:show, :edit, :update, :destroy]
-  before_action :load_references, only: [:new]
+  before_action :load_references, only: [:new, :edit]
   # GET /product_preparations
   def index
-    @product_preparations = ProductPreparation.paginate(page: params[:page], per_page: 15)
+    @product_preparations = ProductPreparation.all
   end
 
   # GET /product_preparations/1/edit
@@ -43,7 +43,7 @@ class ProductPreparationsController < ApplicationController
   private
 
   def load_references
-    @products_without_preparation = Product.left_joins(:product_preparation).where(product_preparations: { id: nil })
+    @products = Product.all
   end
 
   # Set product_preparation by ID
@@ -53,6 +53,18 @@ class ProductPreparationsController < ApplicationController
 
   # It allows only useful parameters.
   def product_preparations_params
-    params.require(:product_preparation).permit(:product_id, :quantity)
+    params.require(:product_preparation).permit(
+      :description,
+      :_destroy,
+      preparation_items_attributes: [
+        :id,
+        :product_id,
+        :quantity,
+        :kind,
+        :created_at,
+        :updated_at,
+        :_destroy
+      ]
+    )
   end
 end

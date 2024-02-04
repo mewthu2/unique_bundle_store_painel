@@ -1,0 +1,52 @@
+<div class="nested-fields" id="preparation-item-container">
+  <div class="row">
+    <div class="col-6">
+      <%= f.label :product_id, 'Produto' %>
+     <%= f.select :product_id,
+             options_for_select(@products.map { |v| ["Produto: #{v.seller_sku} | Estoque: #{v.resolver_stock}", v.id] }, f.object.product_id),
+             {},
+             class: 'form-control select2' %>
+    </div>
+    <div class="col-4">
+      <%= f.label :kind, 'Tipo:' %>
+      <%= f.select :kind, options_for_select({ 'Pendente' => 'pending', 'Concluído' => 'concluded' }, params[:kind]), { include_blank: false }, class: 'form-control' %>
+    </div>
+    <div class="col-2">
+      <%= f.label :quantity, 'Quantidade' %>
+      <%= f.text_field :quantity, class: "form-control" %>
+    </div>
+  </div>
+  <hr>
+  <% if params[:action] != 'show' %>
+    <div class="row">
+      <div class="col-2">
+        <%= link_to_remove_association f, class: 'btn btn-danger float-right' do %>
+          <i class="fa fa-trash"></i> Excluir
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<style>
+  .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #038fd4;
+    color: white;
+  }
+  .select2-results__option--selectable{
+    color: black;
+  }
+
+  .select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    height: 33px;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 26px;
+    position: absolute;
+    top: 3px;
+    right: 1px;
+    width: 20px;
+  }
+</style>

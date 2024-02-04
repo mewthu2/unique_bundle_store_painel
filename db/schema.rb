@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_29_013211) do
-  create_table "product_preparations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2024_02_04_154341) do
+  create_table "preparation_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "product_preparation_id", null: false
     t.bigint "product_id", null: false
-    t.string "quantity"
+    t.integer "quantity"
+    t.bigint "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_product_preparations_on_product_id"
+    t.index ["product_id"], name: "index_preparation_items_on_product_id"
+    t.index ["product_preparation_id"], name: "index_preparation_items_on_product_preparation_id"
+  end
+
+  create_table "product_preparations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -70,5 +79,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_29_013211) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  add_foreign_key "product_preparations", "products"
+  add_foreign_key "preparation_items", "product_preparations"
+  add_foreign_key "preparation_items", "products"
 end

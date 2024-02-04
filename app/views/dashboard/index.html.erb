@@ -60,7 +60,7 @@
             </td>
             <td class="text-center">
               <div class="btn-group" role="group" aria-label="Basic example">
-                <%= link_to edit_product_path(id: product.id), class: 'btn btn-light btn-sm text-dark' do %> <i class="fas fa-edit"></i><% end %>
+                <%= link_to edit_product_path(product), class: 'btn btn-light btn-sm text-dark' do %> <i class="fas fa-edit"></i><% end %>
                 <% if product.supplier_url.present? %>
                   <%= link_to product.supplier_url, class: 'btn btn-light btn-sm text-dark', target:'_blank' do %> <i class="fa-brands fa-internet-explorer"></i><% end %>
                 <% end %>
@@ -68,10 +68,10 @@
             </td>
             <td class="text-center"><%= product.id_product %></td>
             <td class="text-center"><%= product.fulfillment_channel == 'FBA' ? %(<span class="badge bg-primary"><i class="fa-brands fa-amazon"></i> FBA</span>).html_safe : %(<span class="badge bg-secondary"><i class="fas fa-globe-americas"></i> FBM</span>).html_safe %></td>
-            <td class="text-center table-<%= product.resolver_stock.to_i < 0 ? 'success' : 'danger' %>"><h5><%= product.resolver_stock %></h5></td>
+            <td class="text-center table-<%= product.resolver_stock.to_i < 0 ? 'success' : 'danger' %>"><h5><%= product.resolver_stock.to_i + product.quantity_preparation.to_i %></h5></td>
             <td class="text-center"><%= product.total_unit_count %></td>
             <td class="text-center"><%= product.total_unit_count_7 %></td>
-            <td class="text-center"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
+            <td class="text-center" width="300"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
             <td class="text-center"><%= product.seller_sku %></td>
             <td class="text-center">$ <%= product.price %></td>
             <td class="text-center"><%= product.status == 'Active' ? %(<span class="badge bg-success">Ativo</span>).html_safe : %(<span class="badge bg-danger">Inativo</span>).html_safe %></td>

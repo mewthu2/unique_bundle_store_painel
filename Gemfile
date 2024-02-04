@@ -18,7 +18,11 @@ gem 'rest-client'
 # Ruby internationalization and localization (i18n) solution.
 gem 'i18n'
 
+# Makes http fun again! Ain't no party like a httparty, because a httparty don't stop.
 gem 'httparty'
+
+# Cocoon makes it easier to handle nested forms.
+gem 'cocoon'
 
 # ApexCharts.RB is a ruby charting library that's going to give your ruby app beautiful, interactive, and responsive charts powered by ApexCharts.JS
 gem 'apexcharts'

@@ -1,7 +1,7 @@
 class Product < ApplicationRecord
   # Callbacks
   # Associacoes
-  has_one :product_preparation
+  has_many :preparation_items
   # Validacoes
 
   # Escopos

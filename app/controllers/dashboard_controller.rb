@@ -11,7 +11,13 @@ class DashboardController < ApplicationController
   private
 
   def load_references
-    @products = Product.search(params[:search])
+    @products = Product.left_joins(:preparation_items)
+                       .select('products.*,
+                                preparation_items.*,
+                                preparation_items.quantity as quantity_preparation,
+                                products.id as id,
+                                products.updated_at as updated_at')
+                       .search(params[:search])
                        .by_fulfillment_channel(params[:fulfillment_channel])
                        .by_status(params[:status])
                        .by_active(params[:active])

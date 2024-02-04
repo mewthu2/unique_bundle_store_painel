@@ -1,9 +1,9 @@
 class ProductPreparation < ApplicationRecord
   # Callbacks
   # Associacoes
-  belongs_to :product
+  has_many :preparation_items
   # Validacoes
-
+  accepts_nested_attributes_for :preparation_items
   # Escopos
 
   # Metodos estaticos
