@@ -12,11 +12,11 @@ class DashboardController < ApplicationController
 
   def load_references
     @products = Product.left_joins(:preparation_items)
-                       .select('products.*,
-                                preparation_items.*,
-                                preparation_items.quantity as quantity_preparation,
-                                products.id as id,
-                                products.updated_at as updated_at')
+                  .select('products.*,
+                           COALESCE(SUM(CASE WHEN preparation_items.kind = "pending" THEN preparation_items.quantity ELSE 0 END), 0) as quantity_preparation,
+                           products.id as id,
+                           products.updated_at as updated_at')
+                  .group('products.id, products.updated_at')
                        .search(params[:search])
                        .by_fulfillment_channel(params[:fulfillment_channel])
                        .by_status(params[:status])
