@@ -3,7 +3,7 @@
     <div class="col-6">
       <%= f.label :product_id, 'Produto' %>
      <%= f.select :product_id,
-             options_for_select(@products.map { |v| ["Produto: #{v.seller_sku} | Estoque: #{v.resolver_stock}", v.id] }, f.object.product_id),
+             options_for_select(@products.map { |v| ["Produto: #{v.item_name} #{v.seller_sku} | Estoque: #{v.resolver_stock}", v.id] }, f.object.product_id),
              {},
              class: 'form-control select2' %>
     </div>
