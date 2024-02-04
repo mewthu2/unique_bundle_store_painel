@@ -43,6 +43,7 @@
           <th class="text-center"><%= 'ID do Produto' %></th>
           <th class="text-center"><%= 'Armazém' %></th>
           <th class="text-center"><%= 'Estoque' %></th>
+          <th class="text-center"><%= 'Em preparação' %></th>
           <th class="text-center"><%= 'Últimos 30 dias Vendas' %></th>
           <th class="text-center"><%= 'Últimos 7 dias Vendas' %></th>
           <th class="text-center"><%= 'Nome do Item' %></th>
@@ -77,6 +78,13 @@
               <h5>
                 <%= stock %>
               </h5>
+            </td>
+            <td class="text-center">
+              <% if product.quantity_preparation.present? %>
+                <span class="badge bg-warning text-dark">
+                  <i class="fa-solid fa-triangle-exclamation"></i> <%= product.quantity_preparation %>
+                </span>
+              <% end %>
             </td>
             <td class="text-center"><%= product.total_unit_count %></td>
             <td class="text-center"><%= product.total_unit_count_7 %></td>
