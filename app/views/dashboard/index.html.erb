@@ -54,6 +54,11 @@
       </thead>
       <tbody>
         <% @products.each do |product| %>
+          <% if product.resolver_stock.to_i > 0 %>
+            <% stock = product.resolver_stock.to_i - product.quantity_preparation.to_i %>
+          <% else %>
+            <% stock = product.resolver_stock.to_i + product.quantity_preparation.to_i %>
+          <% end %>
           <tr>
             <td class="text-center">
               <input class="form-check-input" type="checkbox" name="product_checkbox" value="<%= product.supplier_url %>" />
@@ -68,7 +73,11 @@
             </td>
             <td class="text-center"><%= product.id_product %></td>
             <td class="text-center"><%= product.fulfillment_channel == 'FBA' ? %(<span class="badge bg-primary"><i class="fa-brands fa-amazon"></i> FBA</span>).html_safe : %(<span class="badge bg-secondary"><i class="fas fa-globe-americas"></i> FBM</span>).html_safe %></td>
-            <td class="text-center table-<%= product.resolver_stock.to_i < 0 ? 'success' : 'danger' %>"><h5><%= product.resolver_stock.to_i + product.quantity_preparation.to_i %></h5></td>
+            <td class="text-center table-<%= stock.to_i < 0 ? 'success' : 'danger' %>">
+              <h5>
+                <%= stock %>
+              </h5>
+            </td>
             <td class="text-center"><%= product.total_unit_count %></td>
             <td class="text-center"><%= product.total_unit_count_7 %></td>
             <td class="text-center" width="300"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
