@@ -36,7 +36,9 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
       pending_customer_order_quantity = response&.dig('payload', 'inventorySummaries', 0, 'inventoryDetails', 'reservedQuantity')&.then { |details| details['pendingCustomerOrderQuantity'] }
 
       prd.update(pending_customer_order_quantity:,
-                 quantity: response&.dig('payload', 'inventorySummaries', 0, 'totalQuantity'))
+                 quantity: response&.dig('payload', 'inventorySummaries', 0, 'totalQuantity'),
+                 fnsku: response&.dig('payload', 'inventorySummaries', 0, 'fnSku')
+                )
     end
   end
 

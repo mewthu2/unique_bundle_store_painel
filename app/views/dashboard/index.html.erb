@@ -52,6 +52,7 @@
           <th class="text-center"><%= 'Últimos 7 dias Vendas' %></th>
           <th class="text-center"><%= 'Nome do Item' %></th>
           <th class="text-center"><%= 'SKU' %></th>
+          <th class="text-center"><%= 'fnSKU' %></th>
           <th class="text-center"><%= 'Preço Unitário' %></th>
           <th class="text-center"><%= 'Status' %></th>
           <th class="text-center"><%= 'Última atualização' %></th>
@@ -94,6 +95,7 @@
             <td class="text-center"><%= product.total_unit_count_7 %></td>
             <td class="text-center" width="300"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
             <td class="text-center"><%= product.seller_sku %></td>
+            <td class="text-center"><%= product.fn_sku %></td>
             <td class="text-center">$ <%= product.price %></td>
             <td class="text-center"><%= product.status == 'Active' ? %(<span class="badge bg-success">Ativo</span>).html_safe : %(<span class="badge bg-danger">Inativo</span>).html_safe %></td>
             <td class="text-center"><%= product.updated_at.strftime('%d/%m/%Y %H:%M') %></td>
