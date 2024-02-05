@@ -48,8 +48,8 @@
           <th class="text-center"><%= 'Armazém' %></th>
           <th class="text-center"><%= 'Estoque' %></th>
           <th class="text-center"><%= 'Em preparação' %></th>
-          <th class="text-center"><%= 'Últimos 30 dias Vendas' %></th>
-          <th class="text-center"><%= 'Últimos 7 dias Vendas' %></th>
+          <th class="text-center"><%= 'Vendas 30 dias' %></th>
+          <th class="text-center"><%= 'Vendas 7 dias' %></th>
           <th class="text-center"><%= 'Nome do Item' %></th>
           <th class="text-center"><%= 'SKU' %></th>
           <th class="text-center"><%= 'fnSKU' %></th>
@@ -93,7 +93,7 @@
             </td>
             <td class="text-center"><%= product.total_unit_count %></td>
             <td class="text-center"><%= product.total_unit_count_7 %></td>
-            <td class="text-center" width="300"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
+            <td class="text-center" width="400"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
             <td class="text-center"><%= product.seller_sku %></td>
             <td class="text-center"><%= product.fnsku %></td>
             <td class="text-center">$ <%= product.price %></td>
@@ -104,7 +104,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <th colspan="12">
+          <th colspan="14">
             
           </th>
         </tr>

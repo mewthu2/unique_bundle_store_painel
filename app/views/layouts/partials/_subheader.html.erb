@@ -1,0 +1,28 @@
+<header class="navbar-header subheader">
+  <div class="navbar-content">
+    <%= link_to root_path, class: 'text-light link' do %>
+      <i class="fa-solid fa-home text-info"></i>
+      <span class="name-col">
+        Home
+      </span>
+    <% end %>
+    <%= link_to dashboard_index_path, class: 'text-light link', style: 'margin-left: 10px;' do %>
+      <i class="fa-solid fa-binoculars text-info"></i>
+      <span class="name-col">
+        Acompanhamento de estoque
+      </span>
+    <% end %>
+    <%= link_to product_preparations_path, class: 'text-light link', style: 'margin-left: 10px;' do %>
+      <i class="fa-regular fa-paper-plane text-info"></i>
+      <span class="name-col">
+        Preparação de Envio
+      </span>
+    <% end %>
+  </div>
+</header>
+<style>
+  .subheader {
+    margin-top: 45px;
+    background-color: #493ef0 !important;
+  }
+</style>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_04_154341) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_04_225452) do
   create_table "preparation_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "product_preparation_id", null: false
     t.bigint "product_id", null: false
@@ -33,6 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_04_154341) do
     t.text "item_description", size: :long
     t.string "listing_id"
     t.string "seller_sku"
+    t.string "fnsku"
     t.string "price"
     t.string "quantity"
     t.string "product_id_type"
