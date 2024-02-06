@@ -1,115 +1,117 @@
 <% title 'Acompanhamento de Envios' %>
 
-<%= form_tag(dashboard_index_path, method: 'get', id: 'search-form' ) do %>
-  <div class="card mb-lg advanced-search-form bg-dark text-light" id="filters">
-    <div class="card-header text-info d-flex justify-content-center">
-      Pesquisa avançada
+<div class="container">
+  <%= form_tag(dashboard_index_path, method: 'get', id: 'search-form' ) do %>
+    <div class="card mb-lg advanced-search-form bg-dark text-light" id="filters">
+      <div class="card-header text-info d-flex justify-content-center">
+        Pesquisa avançada
+      </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-6 col-md-2">
+          <%= label_tag :status, 'Estoque' %>
+          <%= select_tag :status, options_for_select(['Todos','positivo','negativo'].map{|v| [v]}, params[:status]), include_blank: false, class: 'form-control chosen-select' %>
+        </div>
+        <div class="col-6 col-md-2">
+          <%= label_tag :fulfillment_channel, 'Armazém' %>
+          <%= select_tag :fulfillment_channel, options_for_select(['Todos','FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: false, class: 'form-control chosen-select' %>
+        </div>
+        <div class="col-6 col-md-2">
+          <%= label_tag :active, 'Ativo?' %>
+          <%= select_tag :active, options_for_select(['Todos','sim','nao'].map{|v| [v]}, params[:active]), include_blank: false, class: 'form-control chosen-select' %>
+        </div>
+        <div class="col-12 col-md-6">
+          <%= label_tag :search, 'Procurar' %>
+          <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
+        </div>
+      </div>
     </div>
-   <div class="card-body">
-    <div class="row">
-      <div class="col-6 col-md-2">
-        <%= label_tag :status, 'Estoque' %>
-        <%= select_tag :status, options_for_select(['Todos','positivo','negativo'].map{|v| [v]}, params[:status]), include_blank: false, class: 'form-control chosen-select' %>
-      </div>
-      <div class="col-6 col-md-2">
-        <%= label_tag :fulfillment_channel, 'Armazém' %>
-        <%= select_tag :fulfillment_channel, options_for_select(['Todos','FBA','FBM'].map{|v| [v]}, params[:fulfillment_channel]), include_blank: false, class: 'form-control chosen-select' %>
-      </div>
-      <div class="col-6 col-md-2">
-        <%= label_tag :active, 'Ativo?' %>
-        <%= select_tag :active, options_for_select(['Todos','sim','nao'].map{|v| [v]}, params[:active]), include_blank: false, class: 'form-control chosen-select' %>
-      </div>
-      <div class="col-12 col-md-6">
-        <%= label_tag :search, 'Procurar' %>
-        <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
-      </div>
+    <div class="card-footer">
+      <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
+      <%= button_tag formaction: generate_spreadsheet_dashboard_index_path, formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha <% end %>
     </div>
   </div>
-  <div class="card-footer">
-    <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
-    <%= button_tag formaction: generate_spreadsheet_dashboard_index_path, formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha <% end %>
+  <% end %>
+
+  <div class="container d-flex justify-content-center">
+    <button id="openSelectedLinks" class="btn btn-primary">Abrir Links Selecionados</button>  
+    <span class="badge bg-primary p-3">Selecionar todos: <input type="checkbox" id="selectAllCheckbox" class=""> </span> 
   </div>
-</div>
-<% end %>
 
-<div class="container d-flex justify-content-center">
-  <button id="openSelectedLinks" class="btn btn-primary">Abrir Links Selecionados</button>  
-  <span class="badge bg-primary p-3">Selecionar todos: <input type="checkbox" id="selectAllCheckbox" class=""> </span> 
-</div>
-
-<div class="row">
-  <div class="col-12">
-    <table class="table table-dark table-hover table-responsive table-striped" style="overflow-x: scroll; display:none;" id="products-table">
-      <thead>
-        <tr>
-          <th class="text-center"><i class="fa fa-list"></i></th>
-          <th class="text-center"><i class="fa fa-ellipsis-v"></i></th>
-          <th class="text-center"><%= 'ID do Produto' %></th>
-          <th class="text-center"><%= 'Armazém' %></th>
-          <th class="text-center"><%= 'Estoque' %></th>
-          <th class="text-center"><%= 'Em preparação' %></th>
-          <th class="text-center"><%= 'Vendas 30 dias' %></th>
-          <th class="text-center"><%= 'Vendas 7 dias' %></th>
-          <th class="text-center"><%= 'Nome do Item' %></th>
-          <th class="text-center"><%= 'SKU' %></th>
-          <th class="text-center"><%= 'fnSKU' %></th>
-          <th class="text-center"><%= 'Preço Unitário' %></th>
-          <th class="text-center"><%= 'Status' %></th>
-          <th class="text-center"><%= 'Última atualização' %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @products.each do |product| %>
-          <% if product.resolver_stock.to_i > 0 %>
-            <% stock = product.resolver_stock.to_i - product.quantity_preparation.to_i %>
-          <% else %>
-            <% stock = product.resolver_stock.to_i + product.quantity_preparation.to_i %>
-          <% end %>
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-dark table-hover table-responsive table-striped" style="overflow-x: scroll; display:none;" id="products-table">
+        <thead>
           <tr>
-            <td class="text-center">
-              <input class="form-check-input" type="checkbox" name="product_checkbox" value="<%= product.supplier_url %>" />
-            </td>
-            <td class="text-center">
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <%= link_to edit_product_path(product), class: 'btn btn-light btn-sm text-dark' do %> <i class="fas fa-edit"></i><% end %>
-                <% if product.supplier_url.present? %>
-                  <%= link_to product.supplier_url, class: 'btn btn-light btn-sm text-dark', target:'_blank' do %> <i class="fa-brands fa-internet-explorer"></i><% end %>
-                <% end %>
-              </div>
-            </td>
-            <td class="text-center"><%= product.id_product %></td>
-            <td class="text-center"><%= product.fulfillment_channel == 'FBA' ? %(<span class="badge bg-primary"><i class="fa-brands fa-amazon"></i> FBA</span>).html_safe : %(<span class="badge bg-secondary"><i class="fas fa-globe-americas"></i> FBM</span>).html_safe %></td>
-            <td class="text-center table-<%= stock.to_i < 0 ? 'success' : 'danger' %>">
-              <h5>
-                <%= stock %>
-              </h5>
-            </td>
-            <td class="text-center">
-              <% if product.quantity_preparation.present? %>
-                <span class="badge bg-warning text-dark">
-                  <i class="fa-solid fa-triangle-exclamation"></i> <%= product.quantity_preparation %>
-                </span>
-              <% end %>
-            </td>
-            <td class="text-center"><%= product.total_unit_count %></td>
-            <td class="text-center"><%= product.total_unit_count_7 %></td>
-            <td class="text-center" width="400"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
-            <td class="text-center"><%= product.seller_sku %></td>
-            <td class="text-center"><%= product.fnsku %></td>
-            <td class="text-center">$ <%= product.price %></td>
-            <td class="text-center"><%= product.status == 'Active' ? %(<span class="badge bg-success">Ativo</span>).html_safe : %(<span class="badge bg-danger">Inativo</span>).html_safe %></td>
-            <td class="text-center"><%= product.updated_at.strftime('%d/%m/%Y %H:%M') %></td>
+            <th class="text-center"><i class="fa fa-list"></i></th>
+            <th class="text-center"><i class="fa fa-ellipsis-v"></i></th>
+            <th class="text-center"><%= 'ID do Produto' %></th>
+            <th class="text-center"><%= 'Armazém' %></th>
+            <th class="text-center"><%= 'Estoque' %></th>
+            <th class="text-center"><%= 'Em preparação' %></th>
+            <th class="text-center"><%= 'Vendas 30 dias' %></th>
+            <th class="text-center"><%= 'Vendas 7 dias' %></th>
+            <th class="text-center"><%= 'Nome do Item' %></th>
+            <th class="text-center"><%= 'SKU' %></th>
+            <th class="text-center"><%= 'fnSKU' %></th>
+            <th class="text-center"><%= 'Preço Unitário' %></th>
+            <th class="text-center"><%= 'Status' %></th>
+            <th class="text-center"><%= 'Última atualização' %></th>
           </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <th colspan="14">
-            
-          </th>
-        </tr>
-      </tfoot>
-    </table>
+        </thead>
+        <tbody>
+          <% @products.each do |product| %>
+            <% if product.resolver_stock.to_i > 0 %>
+              <% stock = product.resolver_stock.to_i - product.quantity_preparation.to_i %>
+            <% else %>
+              <% stock = product.resolver_stock.to_i + product.quantity_preparation.to_i %>
+            <% end %>
+            <tr>
+              <td class="text-center">
+                <input class="form-check-input" type="checkbox" name="product_checkbox" value="<%= product.supplier_url %>" />
+              </td>
+              <td class="text-center">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <%= link_to edit_product_path(product), class: 'btn btn-light btn-sm text-dark' do %> <i class="fas fa-edit"></i><% end %>
+                  <% if product.supplier_url.present? %>
+                    <%= link_to product.supplier_url, class: 'btn btn-light btn-sm text-dark', target:'_blank' do %> <i class="fa-brands fa-internet-explorer"></i><% end %>
+                  <% end %>
+                </div>
+              </td>
+              <td class="text-center"><%= product.id_product %></td>
+              <td class="text-center"><%= product.fulfillment_channel == 'FBA' ? %(<span class="badge bg-primary"><i class="fa-brands fa-amazon"></i> FBA</span>).html_safe : %(<span class="badge bg-secondary"><i class="fas fa-globe-americas"></i> FBM</span>).html_safe %></td>
+              <td class="text-center table-<%= stock.to_i < 0 ? 'success' : 'danger' %>">
+                <h5>
+                  <%= stock %>
+                </h5>
+              </td>
+              <td class="text-center">
+                <% if product.quantity_preparation.present? %>
+                  <span class="badge bg-warning text-dark">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <%= product.quantity_preparation %>
+                  </span>
+                <% end %>
+              </td>
+              <td class="text-center"><%= product.total_unit_count %></td>
+              <td class="text-center"><%= product.total_unit_count_7 %></td>
+              <td class="text-center" width="400"><%= ActionController::Base.helpers.truncate(product.item_name, length: 60, omission: '...') %></td>
+              <td class="text-center"><%= product.seller_sku %></td>
+              <td class="text-center"><%= product.fnsku %></td>
+              <td class="text-center">$ <%= product.price %></td>
+              <td class="text-center"><%= product.status == 'Active' ? %(<span class="badge bg-success">Ativo</span>).html_safe : %(<span class="badge bg-danger">Inativo</span>).html_safe %></td>
+              <td class="text-center"><%= product.updated_at.strftime('%d/%m/%Y %H:%M') %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="14">
+              
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   </div>
 </div>
 <script>

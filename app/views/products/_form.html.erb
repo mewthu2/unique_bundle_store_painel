@@ -1,119 +1,121 @@
 <%= form_for(product, html: { autocomplete: 'off' }, data: { disabled: read_only }) do |form| %>
-  <div class="page-header">
-    <h4> Editar Produto <small class="text-light"> Dados sobre o produto</small></h4>
-  </div>
+  <div class="container">
+    <div class="page-header">
+      <h4> Editar Produto <small class="text-light"> Dados sobre o produto</small></h4>
+    </div>
 
-  <div class="row">
-    <%= form.label 'Nome do Item', class: 'col-2 col-form-label text-right text-primary' %>
-    <div class="col-12">
-      <%= form.object.item_name.html_safe %>
+    <div class="row">
+      <%= form.label 'Nome do Item', class: 'col-2 col-form-label text-right text-primary' %>
+      <div class="col-12">
+        <%= form.object.item_name.html_safe %>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <%= form.label 'Descrição do Item:', class: 'col-2 col-form-label text-right text-primary' %>
-    <div class="col-12">
-      <%= form.object.item_description.html_safe %>
+    <div class="row">
+      <%= form.label 'Descrição do Item:', class: 'col-2 col-form-label text-right text-primary' %>
+      <div class="col-12">
+        <%= form.object.item_description.html_safe %>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <%= form.label 'URL do fornecedor:', class: 'col-2 col-form-label text-right text-primary' %>
-    <div class="col-12 mb-3">
-       <%= form.text_field :supplier_url, class: 'form-control' %>
+    <div class="row">
+      <%= form.label 'URL do fornecedor:', class: 'col-2 col-form-label text-right text-primary' %>
+      <div class="col-12 mb-3">
+        <%= form.text_field :supplier_url, class: 'form-control' %>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-   <%= form.label 'Product_id', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :id_product, class: 'form-control' %>
+    <div class="row">
+    <%= form.label 'Product_id', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :id_product, class: 'form-control' %>
+      </div>
+      <%= form.label 'SKU', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :seller_sku, class: 'form-control' %>
+      </div>
+      <%= form.label 'Asin', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :asin1, class: 'form-control' %>
+      </div>
     </div>
-    <%= form.label 'SKU', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :seller_sku, class: 'form-control' %>
-    </div>
-    <%= form.label 'Asin', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :asin1, class: 'form-control' %>
-    </div>
-  </div>
 
-  <div class="row">
-    <%= form.label 'Quantidade', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :quantity, class: 'form-control' %>
+    <div class="row">
+      <%= form.label 'Quantidade', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :quantity, class: 'form-control' %>
+      </div>
+      <%= form.label 'Preço', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :price, class: 'form-control', required: true %>
+      </div>
+      <%= form.label 'Status', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :status, class: 'form-control', required: true %>
+      </div>
     </div>
-    <%= form.label 'Preço', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :price, class: 'form-control', required: true %>
-    </div>
-    <%= form.label 'Status', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :status, class: 'form-control', required: true %>
-    </div>
-  </div>
 
-  <div class="row">
-    <%= form.label 'listing_id', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :listing_id, class: 'form-control' %>
+    <div class="row">
+      <%= form.label 'listing_id', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :listing_id, class: 'form-control' %>
+      </div>
+      <%= form.label 'prod_id_type', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :product_id_type, class: 'form-control' %>
+      </div>
+      <%= form.label 'Armazém', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :fulfillment_channel, class: 'form-control' %>
+      </div>
     </div>
-    <%= form.label 'prod_id_type', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :product_id_type, class: 'form-control' %>
-    </div>
-    <%= form.label 'Armazém', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :fulfillment_channel, class: 'form-control' %>
-    </div>
-  </div>
 
-  <div class="row">
-   <%= form.label 'Vendas_30_u', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :total_unit_count, class: 'form-control' %>
-    </div>
-    <%= form.label 'Asin2', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :asin2, class: 'form-control' %>
-    </div>
-    <%= form.label 'Asin3', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :asin3, class: 'form-control' %>
-    </div>
-  </div>
-
-  <div class="row">
-   <%= form.label 'Vendas_30_v', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :total_sales_amount, class: 'form-control' %>
-    </div>
-    <%= form.label 'Contagem', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :resolver_stock, class: 'form-control' %>
-    </div>
-    <%= form.label 'Customer', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :pending_customer_order_quantity, class: 'form-control' %>
-    </div>
-  </div>
-
-  <div class="row">
-   <%= form.label 'Vendas_7_v', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :total_sales_amount_7, class: 'form-control' %>
-    </div>
+    <div class="row">
     <%= form.label 'Vendas_30_u', class: 'col-1 col-form-label text-right' %>
-    <div class="col-3">
-      <%= form.text_field :total_unit_count_7, class: 'form-control' %>
+      <div class="col-3">
+        <%= form.text_field :total_unit_count, class: 'form-control' %>
+      </div>
+      <%= form.label 'Asin2', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :asin2, class: 'form-control' %>
+      </div>
+      <%= form.label 'Asin3', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :asin3, class: 'form-control' %>
+      </div>
     </div>
-  </div>
-  
-  <div class="panel-buttons bg-dark">
-    <%= link_to dashboard_index_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> Voltar <% end %>
-    <% unless read_only %>
-      <%= form.button class: 'btn btn-primary btn-lg', data: { disable_with: 'Salvando...' } do %><i class="fa fa-check"></i> Salvar <% end %>
-    <% end %>
+
+    <div class="row">
+    <%= form.label 'Vendas_30_v', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :total_sales_amount, class: 'form-control' %>
+      </div>
+      <%= form.label 'Contagem', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :resolver_stock, class: 'form-control' %>
+      </div>
+      <%= form.label 'Customer', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :pending_customer_order_quantity, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="row">
+    <%= form.label 'Vendas_7_v', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :total_sales_amount_7, class: 'form-control' %>
+      </div>
+      <%= form.label 'Vendas_30_u', class: 'col-1 col-form-label text-right' %>
+      <div class="col-3">
+        <%= form.text_field :total_unit_count_7, class: 'form-control' %>
+      </div>
+    </div>
+    
+    <div class="panel-buttons bg-dark">
+      <%= link_to dashboard_index_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> Voltar <% end %>
+      <% unless read_only %>
+        <%= form.button class: 'btn btn-primary btn-lg', data: { disable_with: 'Salvando...' } do %><i class="fa fa-check"></i> Salvar <% end %>
+      <% end %>
+    </div>
   </div>
 <% end %>

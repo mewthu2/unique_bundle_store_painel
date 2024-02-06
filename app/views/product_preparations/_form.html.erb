@@ -1,34 +1,36 @@
 <%= form_for(product_preparation, html: { autocomplete: 'off' }, data: { disabled: read_only }) do |form| %>
-  <div class="page-header">
-    <h4>Editar Preparação de Envio<small class="text-light">Dados sobre a preparação de envio</small></h4>
-  </div>
-
-  <div class="row">
-    <div class="col-2">
-      <%= form.label :description, 'Descrição', class: 'col-form-label text-primary' %>
+  <div class="container">
+    <div class="page-header">
+      <h4>Editar Preparação de Envio<small class="text-light">Dados sobre a preparação de envio</small></h4>
     </div>
-    <div class="col-10">
-      <%= form.text_field :description, class: 'form-control' %>
-    </div>
-  </div>
 
-  <div id="preparation_itens">
-    <%= form.fields_for :preparation_items do |pi| %>
-      <%= render 'preparation_item_fields', f: pi %>
-    <% end %>
-    <% if params[:action] != 'show' %>
-      <div class="links">
-        <%= link_to_add_association form, :preparation_items, class: 'btn btn-primary' do %>
-          <i class="fa fa-plus"></i> Adicionar item
-        <% end %>
+    <div class="row">
+      <div class="col-2">
+        <%= form.label :description, 'Descrição', class: 'col-form-label text-primary' %>
       </div>
-    <% end %>
-  </div>
-  <div class="panel-buttons bg-dark">
-    <%= link_to product_preparations_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> Voltar <% end %>
-    <% unless read_only %>
-      <%= form.button class: 'btn btn-primary btn-lg', data: { disable_with: 'Salvando...' } do %><i class="fa fa-check"></i> Salvar <% end %>
-    <% end %>
+      <div class="col-10">
+        <%= form.text_field :description, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div id="preparation_itens">
+      <%= form.fields_for :preparation_items do |pi| %>
+        <%= render 'preparation_item_fields', f: pi %>
+      <% end %>
+      <% if params[:action] != 'show' %>
+        <div class="links">
+          <%= link_to_add_association form, :preparation_items, class: 'btn btn-primary' do %>
+            <i class="fa fa-plus"></i> Adicionar item
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="panel-buttons bg-dark">
+      <%= link_to product_preparations_path, class: 'btn btn-secondary btn-lg' do %><i class="fa fa-undo"></i> Voltar <% end %>
+      <% unless read_only %>
+        <%= form.button class: 'btn btn-primary btn-lg', data: { disable_with: 'Salvando...' } do %><i class="fa fa-check"></i> Salvar <% end %>
+      <% end %>
+    </div>
   </div>
 <% end %>
 <script>
