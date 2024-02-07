@@ -1,9 +1,9 @@
 class ProductPreparation < ApplicationRecord
   # Callbacks
   # Associacoes
-  has_many :preparation_items
+  has_many :preparation_items, dependent: :destroy
   # Validacoes
-  accepts_nested_attributes_for :preparation_items
+  accepts_nested_attributes_for :preparation_items, allow_destroy: true
   # Escopos
 
   # Metodos estaticos
