@@ -47,7 +47,7 @@ class ProductPreparationsController < ApplicationController
       product_preparation_ids_integers << id.to_i
     end
 
-    @preparation_items = PreparationItem.all
+    @preparation_items = PreparationItem.where(id: product_preparation_ids_integers)
 
     respond_to do |format|
       format.pdf do
