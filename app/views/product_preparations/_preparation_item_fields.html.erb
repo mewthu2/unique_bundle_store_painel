@@ -1,10 +1,14 @@
 <div class="nested-fields" id="preparation-item-container">
   <div class="row" data-tag-id="<%= f.object.id %>">
     <div class="col-7">
-      <div class="form-check form-check-inline">
-        <%= check_box_tag 'selected_product_preparations[]', f.object.id, false, class: 'product-preparation-checkbox form-check-input' %>
-        <label class="form-check-label" for="inlineCheckbox1"> <i class="fas fa-tag"></i> </label></span>
-      </div>
+      <% if !f.object.new_record? %>
+        <div class="form-check form-check-inline">
+          <%= check_box_tag 'selected_product_preparations[]', f.object.id, false, class: 'product-preparation-checkbox form-check-input' %>
+          <label class="form-check-label" for="inlineCheckbox1"> <i class="fas fa-tag"></i> </label></span>
+        </div>
+      <% else %>
+        <span class="text-warning">Salve o item primeiro para depois gerar a etiqueta =)</span>
+      <% end %>
       <%= f.label :product_id, 'Produto' %>
       <%= f.select :product_id,
              options_for_select(@products.map { |v| ["Produto: #{v.item_name} #{v.seller_sku} | Estoque: #{v.resolver_stock}", v.id] }, f.object.product_id),
