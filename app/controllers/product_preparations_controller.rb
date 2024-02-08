@@ -41,7 +41,7 @@ class ProductPreparationsController < ApplicationController
   end
 
   def generate_tag
-    product_preparation_ids_array = params[:product_preparation_ids].split(",")
+    product_preparation_ids_array = params[:product_preparation_ids].split(', ')
     product_preparation_ids_integers = []
     product_preparation_ids_array.each do |id|
       product_preparation_ids_integers << id.to_i
