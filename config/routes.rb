@@ -11,5 +11,7 @@ Rails.application.routes.draw do
   end
 
   resources :products
-  resources :product_preparations
+  resources :product_preparations do
+    get :generate_tag, defaults: { format: :pdf }, on: :collection
+  end
 end

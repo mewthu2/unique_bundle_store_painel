@@ -1,0 +1,71 @@
+<div class="tags">
+  <% @preparation_items.each do |pi|%>
+    <div class="card">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>          
+            <th class="text-center label">
+              FNSKU: <%= pi.product.fnsku %><strong> Product name:</strong>
+            </th>
+            <td class="text-center info" colspan="2">
+              <%= pi.product.item_description.html_safe %>
+            </td>                  
+          </tr>      
+          <tr>      	
+            <th class="text-center label">
+              <strong>FNSKU</strong>
+            </th>
+            <td class="text-center info" colspan="2" style="background-color: lightgrey;">
+              <%= pi.product.fnsku %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+<style>
+  .info {
+    border-style: solid;
+    font-size: 9px !important;
+  }
+  .label {
+    background-color: lightgrey;
+    border-style: solid;
+  }
+  .card {
+    min-height: 27em;
+    border-style: dashed;
+    margin-top: 1em;
+    padding: 1em;
+  }
+
+  .tags * {
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+  .tags .table {
+    width: 100%;
+  }
+  .tags .table th {
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+  .tags .table th,
+  .tags .table td {
+    padding: 4px;
+  }
+  .tags .box-title {
+    margin-bottom: 30px;
+    padding: 7px 0 7px 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .tags .box-title:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+</style>

@@ -1,8 +1,12 @@
 <div class="nested-fields" id="preparation-item-container">
-  <div class="row">
-    <div class="col-8">
+  <div class="row" data-tag-id="<%= f.object.id %>">
+    <div class="col-7">
+      <div class="form-check form-check-inline">
+        <%= check_box_tag 'selected_product_preparations[]', f.object.id, false, class: 'product-preparation-checkbox form-check-input' %>
+        <label class="form-check-label" for="inlineCheckbox1"> <i class="fas fa-tag"></i> </label></span>
+      </div>
       <%= f.label :product_id, 'Produto' %>
-     <%= f.select :product_id,
+      <%= f.select :product_id,
              options_for_select(@products.map { |v| ["Produto: #{v.item_name} #{v.seller_sku} | Estoque: #{v.resolver_stock}", v.id] }, f.object.product_id),
              {},
              class: 'form-control select2' %>
@@ -15,17 +19,18 @@
       <%= f.label :quantity, 'Quantidade' %>
       <%= f.text_field :quantity, class: "form-control" %>
     </div>
-  </div>
-  <hr>
-  <% if params[:action] != 'show' %>
-    <div class="row">
-      <div class="col-2">
-        <%= link_to_remove_association f, class: 'btn btn-danger float-right' do %>
-          <i class="fa fa-trash"></i> Excluir
-        <% end %>
-      </div>
+    <div class="col-1">
+      <% if params[:action] != 'show' %>
+        <div class="row">
+          <div class="col-2">
+            <%= link_to_remove_association f, class: 'btn btn-danger mt-3' do %>
+              <i class="fa fa-trash"></i>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 </div>
 <style>
   .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {

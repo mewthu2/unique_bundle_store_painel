@@ -40,6 +40,22 @@ class ProductPreparationsController < ApplicationController
     redirect_to product_preparations_path, notice: 'Preparação de Produto excluído com sucesso.'
   end
 
+  def generate_tag
+    product_preparation_ids_array = params[:product_preparation_ids].split(",")
+    product_preparation_ids_integers = []
+    product_preparation_ids_array.each do |id|
+      product_preparation_ids_integers << id.to_i
+    end
+
+    @preparation_items = PreparationItem.all
+
+    respond_to do |format|
+      format.pdf do
+        render pdf: 'generate_tag'
+      end
+    end
+  end
+
   private
 
   def load_references

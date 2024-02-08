@@ -21,6 +21,12 @@ gem 'i18n'
 # Makes http fun again! Ain't no party like a httparty, because a httparty don't stop.
 gem 'httparty'
 
+# Wicked PDF uses the shell utility wkhtmltopdf to serve a PDF file to a user from HTML.``
+gem 'wicked_pdf'
+
+# This gem installs a binary stub that tries to determine which wkhtmltopdf binary will work on your system, and point to the packaged binary that most closely matches.
+gem 'wkhtmltopdf-binary'
+
 # Cocoon makes it easier to handle nested forms.
 gem 'cocoon'
 
