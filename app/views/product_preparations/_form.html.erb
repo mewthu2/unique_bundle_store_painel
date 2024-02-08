@@ -1,11 +1,13 @@
-<div class="row">
-  <div class="col-12">
-    <%= button_tag class: 'btn btn-primary', id: 'select-all-btn' do %>
-      Selecionar Todos <i class="fas fa-check-double"></i>
-    <% end %>
-    <%= link_to '#', class: 'btn btn-light btn-sm text-dark', id: 'generate-tag-btn', target: '_blank' do %>
-      Gerar Etiquetas <i class="fas fa-tags"></i>
-    <% end %>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <%= button_tag class: 'btn btn-primary', id: 'select-all-btn' do %>
+        Selecionar Todos <i class="fas fa-check-double"></i>
+      <% end %>
+      <%= link_to '#', class: 'btn btn-light btn-sm text-dark', id: 'generate-tag-btn', target: '_blank' do %>
+        Gerar Etiquetas <i class="fas fa-tags"></i>
+      <% end %>
+    </div>
   </div>
 </div>
 <%= form_for(product_preparation, html: { autocomplete: 'off' }, data: { disabled: read_only }) do |form| %>

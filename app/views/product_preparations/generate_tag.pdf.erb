@@ -1,33 +1,37 @@
 <div class="tags">
   <% @preparation_items.each do |pi|%>
     <div class="card">
-      <div class="text-center">
-        <%= image_tag wicked_pdf_asset_base64('admin/logo-reto.png'), size: '200x50' %>
+      <div class="text-center" style="background-color: darkgrey;">
+        <%= image_tag wicked_pdf_asset_base64('admin/logo-reto.png'), size: '300x75' %>
       </div>
       <table class="table table-bordered">
         <tbody>
           <tr>          
             <th class="text-center label">
-              <strong> Product name:</strong>
+              <strong style="color: white;"> Product name:</strong>
             </th>
             <td class="text-center info" colspan="2">
-              <%= pi.product.item_name %>
+              <hr class="class-1" />
+                <%= pi.product.item_name %>
+              <hr>
             </td>                  
           </tr>      
           <tr>      	
             <th class="text-center label">
-              <strong>FNSKU</strong>
+              <strong style="color: white;">FNSKU</strong>
             </th>
-            <td class="text-center info" colspan="2" style="background-color: lightgrey;">
+            <td class="text-center info" colspan="2">
               <%= pi.product.fnsku %>
+              <hr>
             </td>
           </tr>
-           <tr>      	
+          <tr>      	
             <th class="text-center label">
-              <strong>QUANTITY:</strong>
+              <strong style="color: white;">QUANTITY:</strong>
             </th>
-            <td class="text-center info" colspan="2" style="background-color: lightgrey;">
+            <td class="text-center info" colspan="2">
               <%= pi.quantity %>
+              <hr>
             </td>
           </tr>
         </tbody>
@@ -36,12 +40,19 @@
   <% end %>
 </div>
 <style>
+  hr {
+    width: 100%;
+    height: 3px;
+    border: 0px;
+    background-color: black;
+  }
   .info {
     border-style: solid;
     font-size: 30px !important;
+    border: 1px !important;
   }
   .label {
-    background-color: lightgrey;
+    background-color: black;
     border-style: solid;
   }
   .card {
