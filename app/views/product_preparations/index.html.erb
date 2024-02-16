@@ -8,6 +8,7 @@
         <thead>
           <tr>
             <th class="text-center"><i class="fa fa-ellipsis-v"></i></th>
+            <th class="text-center"><%= 'Ordem' %></th>
             <th class="text-center"><%= 'Produtos' %></th>
             <th class="text-center"><%= 'Última atualização' %></th>
           </tr>
@@ -17,9 +18,13 @@
             <tr>
               <td class="text-center">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <%= link_to edit_product_preparation_path(id: product_preparation.id), class: 'btn btn-light btn-sm text-dark' do %> <i class="fas fa-edit"></i><% end %>
+                  <%= link_to edit_product_preparation_path(id: product_preparation.id), class: 'btn btn-light btn-sm text-dark' do %>
+                    <i class="fas fa-edit"></i>
+                  <% end %>
+                  <%= button_to "<i class='fa fa-times'></i>".html_safe, product_preparation_path(product_preparation), data: { confirm: "Are you sure?" }, method: :delete, class: 'btn btn-danger btn-sm text-dark' %>
                 </div>
               </td>
+              <td class="text-center"><%= product_preparation.description %></td>
               <td class="text-center"><%= PreparationItemsPresenter.new(product_preparation).items %></td>
               <td class="text-center"><%= product_preparation.updated_at.strftime('%d/%m/%Y') %></td>
             </tr>

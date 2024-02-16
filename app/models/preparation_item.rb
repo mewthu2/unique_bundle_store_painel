@@ -3,6 +3,7 @@ class PreparationItem < ApplicationRecord
   enum kind: [:pending, :concluded]
   # Associacoes
   belongs_to :product
+  belongs_to :product_preparation
   # Validacoes
 
   # Escopos

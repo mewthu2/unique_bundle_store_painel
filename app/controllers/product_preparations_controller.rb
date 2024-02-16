@@ -1,5 +1,5 @@
 class ProductPreparationsController < ApplicationController
-  before_action :set_product_preparations, only: [:show, :edit, :update, :destroy]
+  before_action :set_product_preparations, only: [:edit, :update, :destroy]
   before_action :load_references, only: [:new, :edit]
   # GET /product_preparations
   def index
@@ -8,6 +8,9 @@ class ProductPreparationsController < ApplicationController
 
   # GET /product_preparations/1/edit
   def edit; end
+
+  # GET /product_preparations/:id
+  def show; end
 
   # GET /product_preparations/new
   def new
