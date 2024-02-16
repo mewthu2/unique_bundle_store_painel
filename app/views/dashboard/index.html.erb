@@ -61,7 +61,7 @@
         </thead>
         <tbody>
           <% @products.each do |product| %>
-            <% if product.resolver_stock.to_i > 0 %>
+            <% if product.resolver_stock.to_i >= 0 %>
               <% stock = product.resolver_stock.to_i - product.quantity_preparation.to_i %>
             <% else %>
               <% stock = product.resolver_stock.to_i + product.quantity_preparation.to_i %>
