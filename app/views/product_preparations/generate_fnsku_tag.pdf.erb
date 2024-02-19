@@ -1,20 +1,22 @@
 <div class="tags">
   <% @preparation_items.each do |pi| %>
-    <div class="card">
-      <div class="barcode">
-        <% string = pi.product.item_name %>
-        <% 
-          primeiros_15_caracteres = string.slice(0, 15)
-          posicao_included = string.index("Included")
-          parte_apos_included = string[posicao_included..-1]
-        %>
-        <% barcode = Barby::Code128B.new(pi.product.fnsku) %>
-        <% png_data = Barby::PngOutputter.new(barcode).to_png %>
-        <img class="image" width="340" height="90" src="data:image/png;base64, <%= Base64.encode64(png_data) %>" />
-        <p class="title text-center"><%= pi.product.fnsku %></p>
-        <p class="product_name text-center"> <%= "#{primeiros_15_caracteres}...#{parte_apos_included}" %></p>
+    <% pi.quantity.times do %>
+      <div class="card">
+        <div class="barcode">
+          <% string = pi.product.item_name %>
+          <% 
+            primeiros_15_caracteres = string.slice(0, 15)
+            posicao_included = string.index("Included") || string.length
+            parte_apos_included = string[posicao_included..-1]
+          %>
+          <% barcode = Barby::Code128B.new(pi.product.fnsku) %>
+          <% png_data = Barby::PngOutputter.new(barcode).to_png %>
+          <img class="image" width="340" height="90" src="data:image/png;base64, <%= Base64.encode64(png_data) %>" />
+          <p class="title text-center"><%= pi.product.fnsku %></p>
+          <p class="product_name text-center"> <%= "#{primeiros_15_caracteres}...#{parte_apos_included}" %></p>
+        </div>
       </div>
-    </div>
+    <% end %>
   <% end %>
 </div>
 
