@@ -30,6 +30,12 @@ gem 'wkhtmltopdf-binary'
 # Cocoon makes it easier to handle nested forms.
 gem 'cocoon'
 
+# This library can read and write PNG files
+gem 'chunky_png'
+
+# Barcode
+gem 'barby'
+
 # ApexCharts.RB is a ruby charting library that's going to give your ruby app beautiful, interactive, and responsive charts powered by ApexCharts.JS
 gem 'apexcharts'
 

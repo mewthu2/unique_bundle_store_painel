@@ -7,6 +7,9 @@
       <%= link_to '#', class: 'btn btn-light btn-sm text-dark', id: 'generate-tag-btn', target: '_blank' do %>
         Gerar Etiquetas <i class="fas fa-tags"></i>
       <% end %>
+      <%= link_to '#', class: 'btn btn-light btn-sm text-dark', id: 'generate-tag-btn-fnsku', target: '_blank' do %>
+        Gerar Etiquetas FNSKU <i class="fas fa-tags"></i>
+      <% end %>
     </div>
   </div>
 </div>
@@ -69,6 +72,17 @@
       checkboxes.forEach(function(checkbox) {
         checkbox.checked = !checkbox.checked;
       });
+    });
+
+    document.getElementById('generate-tag-btn-fnsku').addEventListener('click', function(event) {
+      var selectedIds = getSelectedIds();
+      if (selectedIds.length > 0) {
+        var url = '<%= generate_fnsku_tag_product_preparations_path %>' + '?product_preparation_ids=' + selectedIds.join(',');
+        window.location.href = url;
+      } else {
+        event.preventDefault();
+        alert("Por favor, selecione pelo menos um item.");
+      }
     });
 
     document.getElementById('generate-tag-btn').addEventListener('click', function(event) {

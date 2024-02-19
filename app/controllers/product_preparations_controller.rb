@@ -1,3 +1,7 @@
+require 'barby'
+require 'barby/barcode/code_128'
+require 'barby/outputter/png_outputter'
+
 class ProductPreparationsController < ApplicationController
   before_action :set_product_preparations, only: [:edit, :update, :destroy]
   before_action :load_references, only: [:new, :edit]
@@ -55,6 +59,22 @@ class ProductPreparationsController < ApplicationController
     respond_to do |format|
       format.pdf do
         render pdf: 'generate_tag'
+      end
+    end
+  end
+
+  def generate_fnsku_tag
+    product_preparation_ids_array = params[:product_preparation_ids].split(',')
+    product_preparation_ids_integers = []
+    product_preparation_ids_array.each do |id|
+      product_preparation_ids_integers << id.to_i
+    end
+
+    @preparation_items = PreparationItem.where(id: product_preparation_ids_integers)
+
+    respond_to do |format|
+      format.pdf do
+        render pdf: 'generate_fnsku_tag', page_height: 30, page_width: 80, outline: { outline: false }, margin: { top: 1, bottom: 0, left: 1, right: 1 }
       end
     end
   end
