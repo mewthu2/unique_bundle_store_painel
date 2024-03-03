@@ -37,14 +37,14 @@
               </td>
               <td class="text-center"><span class="text-primary"><b><%= order['AmazonOrderId'] %></b></span></td>
               <td class="text-center text-secondary"><i class="fas fa-image h2"></i></td>
-              <td class="text-center">Nome do Produto</td>
+              <td class="text-center loading-product" data-order-id='<%= order['AmazonOrderId'] %>'><i class="fas fa-spinner fa-spin"></i></td>
               <td class="text-center">
                 <b><%= order['ShipmentServiceLevelCategory'] %></b>
                 <p style="font-size: 9px !important;">
-                  Ship by date: <%= order['LatestShipDate'] %>
+                  Ship by date: <%= formatar_data(order['LatestShipDate']) %>
                 </p>
                 <p style="font-size: 9px !important; margin-top:-10px;">
-                  Deliver by date: <%= order['LatestDeliveryDate'] %>
+                  Deliver by date: <%= formatar_data(order['LatestDeliveryDate']) %>
                 </p>
               </td>
               <td class="text-center">
@@ -95,7 +95,50 @@
     });
   });
 </script>
+<script>
+  $(document).ready(function() {
+  var loadingProducts = $('.loading-product');
 
+  function makeAjaxRequest(index) {
+    if (index < loadingProducts.length) {
+      var orderId = $(loadingProducts[index]).data('order-id');
+      var loadingProductElement = $(loadingProducts[index]);
+
+      $.ajax({
+        url: "<%= search_specific_order_dashboard_index_path %>",
+        method: "GET",
+        data: {
+          amazon_order_id: orderId
+        },
+        success: function(response) {
+
+          loadingProductElement.html('');
+
+          var orderItems = response.payload.OrderItems;
+          var html = '';
+
+          orderItems.forEach(function(item) {
+            html += '<span> <p><b>Product name:</b> ' + item.Title + '</span>';
+            html += '<span> <p><b>SellerSKU:</b> ' + item.SellerSKU + '</span>';
+            html += '<span> <p><b>ASIN:</b> ' + item.ASIN + '</span>';
+          });
+
+          loadingProductElement.html(html);
+
+          makeAjaxRequest(index + 1);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+          makeAjaxRequest(index + 1);
+        }
+      });
+    }
+  }
+
+  makeAjaxRequest(0);
+});
+
+</script>
 <script>
   $('.table').DataTable({
     lengthMenu: [ [100, 500, 1000], [100, 500, 1000] ]

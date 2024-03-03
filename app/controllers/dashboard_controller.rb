@@ -9,11 +9,15 @@ class DashboardController < ApplicationController
   end
 
   def view_live_orders
-    @orders = SearchOrderStatusJob.perform_now(params[:order_kind], params[:next_token])
+    @orders = SearchOrderStatusJob.perform_now(params[:order_kind], params[:next_token], '')
   end
 
   def change_order_markup_status
     OrderMarkup.find_or_create_by!(amazon_order_id: params[:amazon_order_id]).update(status: params[:status])
+  end
+
+  def search_specific_order
+    json_response(SearchOrderStatusJob.perform_now(params[:order_kind], '', params[:amazon_order_id]))
   end
 
   private

@@ -1,7 +1,11 @@
 class SearchOrderStatusJob < ApplicationJob
-  def perform(order_kind, next_token)
+  def perform(order_kind, next_token, specific_order)
     @access_token = obtain_acess_token
-    search(order_kind, next_token)
+    if specific_order.present?
+      search_specific_order(specific_order)
+    else
+      search(order_kind, next_token)
+    end
   end
 
   def search(order_kind, next_token)
@@ -19,6 +23,11 @@ class SearchOrderStatusJob < ApplicationJob
 
     HTTParty.get(order_uri, query: request_params,
                             headers: { 'x-amz-access-token' => @access_token })
+  end
+
+  def search_specific_order(specific_order)
+    order_uri = "#{ENV['ENDPOINT_AMAZON']}/orders/v0/orders/#{specific_order}/orderItems"
+    HTTParty.get(order_uri, headers: { 'x-amz-access-token' => @access_token })
   end
 
   private
