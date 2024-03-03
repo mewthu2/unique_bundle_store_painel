@@ -3,13 +3,28 @@ module ApplicationHelper
     content_for(:title) { page_title }
   end
 
-  def verify_comercial_hour?
-    # dia_da_semana = Time.now.wday
+  def formatar_data(data_string)
+    data = DateTime.parse(data_string)
 
-    # hora_atual = Time.now.hour
-    # minutos_atual = Time.now.min
+    dia_semana = data.strftime('%A')
+    mes = data.strftime('%B')
+    ano = data.year
 
-    # dia_da_semana >= 1 && dia_da_semana <= 5 && (hora_atual > 8 || (hora_atual == 8 && minutos_atual >= 0)) && hora_atual < 15
-    true
+    "#{dia_semana}, #{mes} #{data.day}, #{ano}"
+  end
+
+  def horas_ou_dias_atras(data)
+    data_time = DateTime.parse(data)
+
+    diferenca_em_horas = ((Time.now - data_time) / 3600).round
+
+    # Se a diferença for menor que 24 horas, retorna quantas horas atrás
+    if diferenca_em_horas < 24
+      "#{diferenca_em_horas} hours ago"
+    else
+      # Caso contrário, retorna quantos dias atrás
+      dias_atras = (Time.now.to_date - data_time.to_date).to_i
+      "#{dias_atras} days ago"
+    end
   end
 end

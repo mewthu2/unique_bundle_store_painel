@@ -31,7 +31,10 @@
                   <% end %>
                 </div>
               </td>
-              <td class="text-center"><%= order['PurchaseDate'] %></td>
+              <td class="text-center">
+                <b><%= horas_ou_dias_atras(order['PurchaseDate']) %></b>
+                <p><%= formatar_data(order['PurchaseDate']) %></p>
+              </td>
               <td class="text-center"><span class="text-primary"><b><%= order['AmazonOrderId'] %></b></span></td>
               <td class="text-center text-secondary"><i class="fas fa-image h2"></i></td>
               <td class="text-center">Nome do Produto</td>
