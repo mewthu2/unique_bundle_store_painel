@@ -13,7 +13,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :products
+  resources :products do
+    collection do
+      get :find_by_seller_sku
+    end
+  end
   resources :product_preparations do
     get :generate_tag, defaults: { format: :pdf }, on: :collection
     get :generate_fnsku_tag, defaults: { format: :pdf }, on: :collection

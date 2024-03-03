@@ -14,7 +14,6 @@
             <th class="text-center"><%= 'Detalhes' %></th>
             <th class="text-center"><%= 'Imagem' %></th>
             <th class="text-center"><%= 'Nome do Produto(s)' %></th>
-            <th class="text-center"><%= 'Tipo' %></th>
             <th class="text-center"><%= 'Status' %></th>
           </tr>
         </thead>
@@ -37,16 +36,7 @@
               </td>
               <td class="text-center"><span class="text-primary"><b><%= order['AmazonOrderId'] %></b></span></td>
               <td class="text-center text-secondary"><i class="fas fa-image h2"></i></td>
-              <td class="text-center loading-product" data-order-id='<%= order['AmazonOrderId'] %>'><i class="fas fa-spinner fa-spin"></i></td>
-              <td class="text-center">
-                <b><%= order['ShipmentServiceLevelCategory'] %></b>
-                <p style="font-size: 9px !important;">
-                  Ship by date: <%= formatar_data(order['LatestShipDate']) %>
-                </p>
-                <p style="font-size: 9px !important; margin-top:-10px;">
-                  Deliver by date: <%= formatar_data(order['LatestDeliveryDate']) %>
-                </p>
-              </td>
+              <td class="text-center loading-product" data-order-id='<%= order['AmazonOrderId'] %>' width=300><i class="fas fa-spinner fa-spin"></i></td>
               <td class="text-center">
                 <span class="badge bg-danger">
                   <%= order['OrderStatus'] %> (<%= order['NumberOfItemsUnshipped'] %>)
@@ -96,7 +86,7 @@
   });
 </script>
 <script>
-  $(document).ready(function() {
+$(document).ready(function() {
   var loadingProducts = $('.loading-product');
 
   function makeAjaxRequest(index) {
@@ -111,19 +101,39 @@
           amazon_order_id: orderId
         },
         success: function(response) {
-
+          console.log(response);
           loadingProductElement.html('');
 
-          var orderItems = response.payload.OrderItems;
-          var html = '';
+          if (response.payload && response.payload.OrderItems) {
+            var orderItems = response.payload.OrderItems;
 
-          orderItems.forEach(function(item) {
-            html += '<span> <p><b>Product name:</b> ' + item.Title + '</span>';
-            html += '<span> <p><b>SellerSKU:</b> ' + item.SellerSKU + '</span>';
-            html += '<span> <p><b>ASIN:</b> ' + item.ASIN + '</span>';
-          });
+            orderItems.forEach(function(item) {
+              $.ajax({
+                url: "<%= find_by_seller_sku_products_path %>",
+                method: "GET",
+                data: {
+                  seller_sku: item.SellerSKU
+                },
+                success: function(productResponse) {
+                  var productId = productResponse.id;
 
-          loadingProductElement.html(html);
+                  var editLink = '/products/' + productId + '/edit';
+                  var html = '<span><p><b><button class="btn btn-light btn-sm text-dark" href="' + editLink + '"><i class="fas fa-edit"></i></button></b></p></span>';
+                  html += '<span><p><b><button class="btn btn-light btn-sm text-dark" href="' + productResponse.supplier_url + '"><i class="fas fa-edit"></i></button></b></p></span>';
+                  html += '<span><p style="font-size:9px !important;">' + item.Title + '</p></span>';
+                  html += '<span><p><b>SellerSKU:</b> ' + item.SellerSKU + '</p></span>';
+                  html += '<span><p><b>ASIN:</b> ' + item.ASIN + '</p></span>';
+
+                  loadingProductElement.append(html);
+                },
+                error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+                }
+              });
+            });
+          } else {
+            makeAjaxRequest(index);
+          }
 
           makeAjaxRequest(index + 1);
         },
@@ -137,7 +147,6 @@
 
   makeAjaxRequest(0);
 });
-
 </script>
 <script>
   $('.table').DataTable({

@@ -1,6 +1,10 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
+  def find_by_seller_sku
+    json_response(Product.find_by(seller_sku: params[:seller_sku]))
+  end
+
   # GET /products/1/edit
   def edit; end
 
