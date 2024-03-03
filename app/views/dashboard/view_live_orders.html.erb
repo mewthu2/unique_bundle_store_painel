@@ -2,7 +2,7 @@
 
 <div class="container">
   <% if @orders['payload']["NextToken"].present? %>
-    <%= link_to view_live_orders_dashboard_index_path(order_kind: 'MFN', next_token: @orders['payload']["NextToken"]), class: 'btn btn-primary' do %><i class="fas fa-plus"></i> Próximos 100 pedidos <% end %>
+    <%= link_to view_live_orders_dashboard_index_path(order_kind: 'MFN', next_token: @orders['payload']["NextToken"]), class: 'btn btn-primary', target: '_blank' do %><i class="fas fa-plus"></i> Próximos 100 pedidos <% end %>
   <% end %>
   <div class="row">
     <div class="col-12">
