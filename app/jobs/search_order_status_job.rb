@@ -1,17 +1,18 @@
 class SearchOrderStatusJob < ApplicationJob
-  def perform
+  def perform(order_kind, next_token)
     @access_token = obtain_acess_token
-    search
+    search(order_kind, next_token)
   end
 
-  def search
+  def search(order_kind, next_token)
     created_after_date = '2023-12-10'
 
     request_params = {
       MarketplaceIds: ENV['MARKETPLACE_ID'],
       CreatedAfter: created_after_date,
       OrderStatuses: 'Unshipped',
-      FulfillmentChannels: 'MFN'
+      FulfillmentChannels: order_kind.to_s,
+      NextToken: next_token.to_s
     }
 
     order_uri = "#{ENV['ENDPOINT_AMAZON']}/orders/v0/orders"

@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   resources :dashboard do
     collection do
+      get :view_live_orders
+      post :change_order_markup_status
       post :generate_spreadsheet
     end
   end

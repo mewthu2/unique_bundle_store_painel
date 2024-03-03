@@ -1,6 +1,6 @@
-class OrderMark < ApplicationRecord
+class OrderMarkup < ApplicationRecord
   # Callbacks
-
+  enum status: [:pending, :concluded]
   # Associacoes
   # Validacoes
 
