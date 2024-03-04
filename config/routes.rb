@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     collection do
       get :view_live_orders
       get :search_specific_order
+      get :search_order_items
       post :change_order_markup_status
       post :generate_spreadsheet
     end

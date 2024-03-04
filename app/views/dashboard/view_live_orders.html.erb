@@ -91,50 +91,31 @@ $(document).ready(function() {
 
   function makeAjaxRequest(index) {
     if (index < loadingProducts.length) {
-      var orderId = $(loadingProducts[index]).data('order-id');
       var loadingProductElement = $(loadingProducts[index]);
+      var amazonOrderId = loadingProductElement.data('order-id');
 
       $.ajax({
-        url: "<%= search_specific_order_dashboard_index_path %>",
+        url: "<%= find_by_seller_sku_products_path %>",
         method: "GET",
         data: {
-          amazon_order_id: orderId
+          amazon_order_id: amazonOrderId
         },
-        success: function(response) {
-          console.log(response);
-          loadingProductElement.html('');
+        success: function(orderitemResponse) {
+          var productId = orderitemResponse.product_id;
+          console.log(orderitemResponse);
+          var editLink = '/products/' + productId + '/edit';
+          var html = '<span class="btn-group"><p><b><a class="btn btn-light btn-sm text-dark" target="_blank" href="' + editLink + '"><i class="fas fa-edit"></i></a></b></p>';
+     
+          html += '<span><p><b><a class="btn btn-light btn-sm text-dark" target="_blank" href="' + orderitemResponse.supplier_url + '"><i class="fa-brands fa-internet-explorer"></i></a></b></p></span>';
+       
+          html += '</span>'
+          html += '<span><p style="font-size:9px !important;">' + orderitemResponse.item_name + '</p></span>';
+          html += '<span><p><b>SellerSKU:</b> ' + orderitemResponse.seller_sku + '</p></span>';
+          html += '<span><p><b>ASIN:</b> ' + orderitemResponse.asin1 + '</p></span>';
 
-          if (response.payload && response.payload.OrderItems) {
-            var orderItems = response.payload.OrderItems;
+          loadingProductElement.find('.fa-spinner').remove();
 
-            orderItems.forEach(function(item) {
-              $.ajax({
-                url: "<%= find_by_seller_sku_products_path %>",
-                method: "GET",
-                data: {
-                  seller_sku: item.SellerSKU
-                },
-                success: function(productResponse) {
-                  var productId = productResponse.id;
-
-                  var editLink = '/products/' + productId + '/edit';
-                  var html = '<span><p><b><button class="btn btn-light btn-sm text-dark" href="' + editLink + '"><i class="fas fa-edit"></i></button></b></p></span>';
-                  html += '<span><p><b><button class="btn btn-light btn-sm text-dark" href="' + productResponse.supplier_url + '"><i class="fas fa-edit"></i></button></b></p></span>';
-                  html += '<span><p style="font-size:9px !important;">' + item.Title + '</p></span>';
-                  html += '<span><p><b>SellerSKU:</b> ' + item.SellerSKU + '</p></span>';
-                  html += '<span><p><b>ASIN:</b> ' + item.ASIN + '</p></span>';
-
-                  loadingProductElement.append(html);
-                },
-                error: function(xhr, status, error) {
-                  console.error(xhr.responseText);
-                }
-              });
-            });
-          } else {
-            makeAjaxRequest(index);
-          }
-
+          loadingProductElement.append(html);
           makeAjaxRequest(index + 1);
         },
         error: function(xhr, status, error) {
@@ -147,6 +128,8 @@ $(document).ready(function() {
 
   makeAjaxRequest(0);
 });
+
+
 </script>
 <script>
   $('.table').DataTable({

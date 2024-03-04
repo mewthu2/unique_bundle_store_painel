@@ -20,6 +20,10 @@ class DashboardController < ApplicationController
     json_response(SearchOrderStatusJob.perform_now(params[:order_kind], '', params[:amazon_order_id]))
   end
 
+  def search_order_items
+    json_response(OrderItem.find_by(amazon_order_id: params[:amazon_order_id]))
+  end
+
   private
 
   def load_references

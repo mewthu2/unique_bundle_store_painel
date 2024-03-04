@@ -2,7 +2,23 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   def find_by_seller_sku
-    json_response(Product.find_by(seller_sku: params[:seller_sku]))
+    order_item = OrderItem.joins(:product).find_by(amazon_order_id: params[:amazon_order_id])
+    if order_item.present?
+      json_response({
+        id: order_item.id,
+        amazon_order_id: order_item.amazon_order_id,
+        item_name: order_item.product.item_name,
+        product_id: order_item.product_id,
+        quantity: order_item.quantity,
+        created_at: order_item.created_at,
+        updated_at: order_item.updated_at,
+        supplier_url: order_item.product.supplier_url,
+        seller_sku: order_item.product.seller_sku,
+        asin1: order_item.product.asin1
+      })
+    else
+      json_response('Order item do not found')
+    end
   end
 
   # GET /products/1/edit
