@@ -8,6 +8,12 @@ class SearchOrderStatusJob < ApplicationJob
     end
   end
 
+  def aaa
+    Product.where(fulfillment_channel: 'FBA').each do |prod|
+      Product.find_by(fulfillment_channel: 'FBM', id_product: prod.id_product)&.update(supplier_url: prod.supplier_url)
+    end
+  end
+
   def search(order_kind, next_token)
     created_after_date = '2023-12-10'
 

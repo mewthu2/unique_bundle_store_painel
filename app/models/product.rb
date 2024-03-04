@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   # Callbacks
+  after_commit :update_product_supplier_url
   # Associacoes
   has_many :preparation_items
   # Validacoes
@@ -51,6 +52,12 @@ class Product < ApplicationRecord
             products.item_name LIKE :valor OR
             products.item_description LIKE :valor OR
             products.id LIKE :valor', valor: "#{value}%")
+    end
+  end
+
+  def update_product_supplier_url
+    Product.where(id_product:).each do |prod|
+      prod&.update(supplier_url: prod.supplier_url)
     end
   end
   # Metodos estaticos
