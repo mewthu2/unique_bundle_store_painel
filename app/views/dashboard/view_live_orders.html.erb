@@ -106,7 +106,7 @@ $(document).ready(function() {
           var editLink = '/products/' + productId + '/edit';
           var html = '<span class="btn-group"><p><b><a class="btn btn-light btn-sm text-dark" target="_blank" href="' + editLink + '"><i class="fas fa-edit"></i></a></b></p>';
           if (orderitemResponse.supplier_url) {
-            html += '<span><p><b><a class="btn btn-light btn-sm text-dark" target="_blank" href='orderitemResponse.supplier_url'><i class="fa-brands fa-internet-explorer"></i></a></b></p></span>';
+            html += '<span><p><b><a class="btn btn-light btn-sm text-dark" target="_blank" href="' + orderitemResponse.supplier_url + '"><i class="fa-brands fa-internet-explorer"></i></a></b></p></span>';
           }
        
           html += '</span>'
