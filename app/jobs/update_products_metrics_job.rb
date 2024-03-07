@@ -42,9 +42,9 @@ class UpdateProductsMetricsJob < ActiveJob::Base
         total_sales_amount += item['totalSales']['amount'].to_f
       end
       if days == 6
-        prd.update(total_unit_count_7: total_unit_count, total_sales_amount_7: total_sales_amount)
+        prd.update_columns(total_unit_count_7: total_unit_count, total_sales_amount_7: total_sales_amount)
       else
-        prd.update(total_unit_count:, total_sales_amount:)
+        prd.update_columns(total_unit_count:, total_sales_amount:)
       end
     end
   end

@@ -57,7 +57,7 @@ class Product < ApplicationRecord
 
   def update_product_supplier_url
     Product.where(id_product:).each do |prod|
-      prod&.update(supplier_url: prod.supplier_url)
+      prod&.update_columns(supplier_url: prod.supplier_url)
     end
   end
   # Metodos estaticos

@@ -71,7 +71,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
   def create_update_products(result_hash)
     result_hash.each do |data|
       product = Product.find_or_create_by(seller_sku: data[1]['seller-sku'])
-      product.update(
+      product.update_columns(
         item_name: data[1]['item-name'],
         item_description: data[1]['item-description'],
         listing_id: data[1]['listing-id'],

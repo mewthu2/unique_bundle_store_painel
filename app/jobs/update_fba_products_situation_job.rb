@@ -35,10 +35,10 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
       )
       pending_customer_order_quantity = response&.dig('payload', 'inventorySummaries', 0, 'inventoryDetails', 'reservedQuantity')&.then { |details| details['pendingCustomerOrderQuantity'] }
 
-      prd.update(pending_customer_order_quantity:,
-                 quantity: response&.dig('payload', 'inventorySummaries', 0, 'totalQuantity'),
-                 fnsku: response&.dig('payload', 'inventorySummaries', 0, 'fnSku')
-                )
+      prd.update_columns(pending_customer_order_quantity:,
+                         quantity: response&.dig('payload', 'inventorySummaries', 0, 'totalQuantity'),
+                         fnsku: response&.dig('payload', 'inventorySummaries', 0, 'fnSku')
+                        )
     end
   end
 
@@ -49,7 +49,7 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
       c = product.quantity.to_i
       totalx = b - c
 
-      product.update(resolver_stock: a + totalx)
+      product.update_columns(resolver_stock: a + totalx)
     end
   end
 
