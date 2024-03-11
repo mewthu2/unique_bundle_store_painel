@@ -26,5 +26,13 @@
         <li><%= link_to view_live_orders_dashboard_index_path(order_kind: 'MFN', next_token: ''), class: 'dropdown-item' do %><i class="fas fa-globe-americas"></i> FBM <% end %></li>
       </ul>
     </span>
+    <span class="dropdown-center">
+      <span class="dropdown-toggle name-col text-light link" data-bs-toggle="dropdown" aria-expanded="false" style='margin-left: 10px; cursor:pointer;'>
+        <i class="fas fa-cogs text-info"></i> Funções
+      </span>
+      <ul class="dropdown-menu">
+        <li><%= link_to update_order_markups_dashboard_index_path, class: 'dropdown-item' do %><i class="fas fa-retweet"></i> Atualização de Items FBM <% end %></li>
+      </ul>
+    </span>
   </div>
 </header>

@@ -24,6 +24,10 @@ class DashboardController < ApplicationController
     json_response(OrderItem.find_by(amazon_order_id: params[:amazon_order_id]))
   end
 
+  def update_order_markups
+    UpdateOrderItemsJob.perform_now
+  end
+
   private
 
   def load_references

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get :search_order_items
       post :change_order_markup_status
       post :generate_spreadsheet
+      get :update_order_markups
     end
   end
 
