@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :product_preparations do
     get :generate_tag, defaults: { format: :pdf }, on: :collection
     get :generate_fnsku_tag, defaults: { format: :pdf }, on: :collection
+    post :create_product_preparations, on: :collection
   end
 
   resources :order_marks
