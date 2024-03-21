@@ -99,17 +99,17 @@
 </script>
 <script>
   $(document).ready(function() {
-    var prepare0rderButton = $('.prepare-selected-orders');
+    var prepareOrderButton = $('.prepare-selected-orders');
 
     $('.order-checkbox').change(function() {
       if ($('.order-checkbox:checked').length > 0) {
-        prepare0rderButton.removeAttr('disabled');
+        prepareOrderButton.removeAttr('disabled');
       } else {
-        prepareOrderButton.attr('disabled', 'disabled');
+        prepareOrderButton.attr('disabled', true);
       }
     });
 
-    prepare0rderButton.click(function() {
+    prepareOrderButton.click(function() {
       var button = $(this);
       var spinner = button.find('.fa-spinner');
       button.prop('disabled', true);
