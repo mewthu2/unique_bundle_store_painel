@@ -1,24 +1,15 @@
+# frozen_string_literal: true
+
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: %i[show edit update destroy]
 
   def find_by_seller_sku
-    order_item = OrderItem.joins(:product).find_by(amazon_order_id: params[:amazon_order_id])
-    if order_item.present?
-      json_response({
-        id: order_item.id,
-        amazon_order_id: order_item.amazon_order_id,
-        item_name: order_item.product.item_name,
-        product_id: order_item.product_id,
-        quantity: order_item.quantity,
-        created_at: order_item.created_at,
-        updated_at: order_item.updated_at,
-        supplier_url: order_item.product.supplier_url,
-        seller_sku: order_item.product.seller_sku,
-        asin1: order_item.product.asin1
-      })
-    else
-      json_response('Order item do not found')
+    cached_order_item = Rails.cache.fetch("order_item_#{params[:amazon_order_id]}", expires_in: 1.hour) do
+      order_item = OrderItem.joins(:product).find_by(amazon_order_id: params[:amazon_order_id])
+      order_item.present? ? serialize_order_item(order_item) : nil
     end
+
+    json_response(cached_order_item || 'Order item not found')
   end
 
   # GET /products/1/edit
@@ -52,6 +43,21 @@ class ProductsController < ApplicationController
 
   private
 
+  def serialize_order_item(order_item)
+    {
+      id: order_item.id,
+      amazon_order_id: order_item.amazon_order_id,
+      item_name: order_item.product.item_name,
+      product_id: order_item.product_id,
+      quantity: order_item.quantity,
+      created_at: order_item.created_at,
+      updated_at: order_item.updated_at,
+      supplier_url: order_item.product.supplier_url,
+      seller_sku: order_item.product.seller_sku,
+      asin1: order_item.product.asin1
+    }
+  end
+
   # Set product by ID
   def set_product
     @product = Product.find(params[:id])
@@ -79,7 +85,6 @@ class ProductsController < ApplicationController
                   :total_sales_amount_7,
                   :resolver_stock,
                   :supplier_url,
-                  :pending_customer_order_quantity
-                  )
+                  :pending_customer_order_quantity)
   end
 end
