@@ -3,6 +3,10 @@
 <div class="container">
   <% if @orders['payload']["NextToken"].present? %>
     <%= link_to view_live_orders_dashboard_index_path(order_kind: 'MFN', next_token: @orders['payload']["NextToken"]), class: 'btn btn-primary', target: '_blank' do %><i class="fas fa-plus"></i> Próximos 100 pedidos <% end %>
+    <%= button_tag '', class: 'btn btn-light prepare-selected-orders' do %>
+      <i class="fa-regular fa-paper-plane"></i> Preparar Envio
+      <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+    <% end %>
   <% end %>
   <div class="row">
     <div class="col-12">
@@ -26,7 +30,10 @@
                     <button class="btn btn-success"><i class="fas fa-check"></i></button>
                     <button class="btn btn-light change-order-status" data-order-status='<%= 'pending' %>' data-order-id="<%= order['AmazonOrderId'] %>"><i class="fas fa-sync-alt"></i></button>
                   <% else %>
-                    <button class="btn btn-primary change-order-status" data-order-status='<%= 'concluded' %>' data-order-id="<%= order['AmazonOrderId'] %>">Marcar</button>
+                    <input style="width: 20px; height: 40px;" type="checkbox" class="order-checkbox"
+                                                                              data-order-id="<%= order['AmazonOrderId'] %>"
+                                                                              data-number-of-items-unshipped="<%= order['NumberOfItemsUnshipped'] %>"
+                                                                              data-order-status="<%= 'concluded' %>" >
                   <% end %>
                 </div>
               </td>
@@ -70,17 +77,82 @@
         status: orderStatus
       },
       success: function(data) {
-        if (orderStatus === 'pending') {
-          button.removeClass('btn-success').removeClass('btn-light').addClass('btn-primary').html('Marcar').attr('data-order-status', 'concluded');
-          button.parent('.btn-group').find('.btn-success').remove();
-        } else {
-          button.removeClass('btn-primary').addClass('btn-success').html('<i class="fas fa-check"></i>');
-          var newButton = $('<button>').addClass('btn btn-light change-order-status').attr('data-order-status', 'pending').attr('data-order-id', orderId).html('<i class="fas fa-sync-alt"></i>');
-          button.after(newButton);
-        }
+        button.parent().find('.btn').remove();
+        
+        var textbox = $('<input>').attr({
+          type: 'text',
+          class: 'form-control',
+          value: 'Checked',
+          readonly: true
+        }).css({
+          width: '100px',
+          height: '40px'
+        });
+
+        button.parent().append(textbox);
       },
       error: function(xhr, status, error) {
 
+      }
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $('.prepare-selected-orders').click(function() {
+      var button = $(this);
+      var spinner = button.find('.fa-spinner');
+      button.prop('disabled', true);
+
+      button.find('.fa-paper-plane').hide();
+      spinner.show();
+      
+      var selectedOrders = [];
+
+      $('.order-checkbox:checked').each(function() {
+        var order = {
+          amazon_order_id: $(this).data('order-id'),
+          number_of_items_unshipped: $(this).data('number-of-items-unshipped'),
+          order_status: $(this).data('order-status')
+        };
+        selectedOrders.push(order);
+      });
+
+      if (selectedOrders.length > 0) {
+        $.ajax({
+          url: '<%= create_product_preparations_product_preparations_path %>',
+          type: 'POST',
+          data: {
+            selected_orders: selectedOrders
+          },
+          success: function(response) {
+            console.log('Pedidos preparados com sucesso!');
+            $('.order-checkbox:checked').each(function() {
+                var checkbox = $(this);
+                
+                checkbox.removeClass('btn-primary').addClass('btn-success').html('<i class="fas fa-check"></i>');
+
+                var newButton = $('<button>')
+                  .attr('type', 'button')
+                  .addClass('btn btn-success change-order-status')
+                  .attr('data-order-status', 'concluded')
+                  .html('<i class="fas fa-check"></i>')
+                
+                checkbox.after(newButton);
+
+                checkbox.remove();
+            });
+          },
+          error: function(xhr, status, error) {
+            console.error('Erro ao preparar os pedidos:', error);
+          },
+          complete: function() {
+            button.find('.fa-paper-plane').show();
+            spinner.hide();
+          }
+        });
+      } else {
+        console.log('Nenhum pedido selecionado.');
       }
     });
   });
