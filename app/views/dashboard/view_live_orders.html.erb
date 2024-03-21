@@ -3,10 +3,10 @@
 <div class="container">
   <% if @orders['payload']["NextToken"].present? %>
     <%= link_to view_live_orders_dashboard_index_path(order_kind: 'MFN', next_token: @orders['payload']["NextToken"]), class: 'btn btn-primary', target: '_blank' do %><i class="fas fa-plus"></i> Próximos 100 pedidos <% end %>
-    <%= button_tag '', class: 'btn btn-light prepare-selected-orders' do %>
-      <i class="fa-regular fa-paper-plane"></i> Preparar Envio
-      <i class="fas fa-spinner fa-spin" style="display: none;"></i>
-    <% end %>
+  <% end %>
+  <%= button_tag '', class: 'btn btn-light prepare-selected-orders', disabled: true do %>
+    <i class="fa-regular fa-paper-plane"></i> Preparar Envio
+    <i class="fas fa-spinner fa-spin" style="display: none;"></i>
   <% end %>
   <div class="row">
     <div class="col-12">
@@ -99,7 +99,17 @@
 </script>
 <script>
   $(document).ready(function() {
-    $('.prepare-selected-orders').click(function() {
+    var prepareOrderButton = $('.prepare-selected-orders');
+
+    $('.order-checkbox').change(function() {
+      if ($('.order-checkbox:checked').length > 0) {
+        prepareOrderButton.removeAttr('disabled');
+      } else {
+        prepareOrderButton.attr('disabled', true);
+      }
+    });
+
+    prepareOrderButton.click(function() {
       var button = $(this);
       var spinner = button.find('.fa-spinner');
       button.prop('disabled', true);
