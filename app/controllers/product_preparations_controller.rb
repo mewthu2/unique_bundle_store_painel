@@ -9,7 +9,7 @@ class ProductPreparationsController < ApplicationController
   before_action :load_references, only: %i[new edit]
   # GET /product_preparations
   def index
-    @product_preparations = ProductPreparation.all
+    @product_preparations = ProductPreparation.includes(preparation_items: :product)
   end
 
   # GET /product_preparations/1/edit
