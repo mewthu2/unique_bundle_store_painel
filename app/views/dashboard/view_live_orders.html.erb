@@ -34,6 +34,7 @@
                                                                               data-order-id="<%= order['AmazonOrderId'] %>"
                                                                               data-number-of-items-unshipped="<%= order['NumberOfItemsUnshipped'] %>"
                                                                               data-order-status="<%= 'concluded' %>" >
+                    <button style="margin-left: 10px;" class="btn btn-primary change-order-status" data-order-status='<%= 'concluded' %>' data-order-id="<%= order['AmazonOrderId'] %>">Marcar</button>
                   <% end %>
                 </div>
               </td>
@@ -77,19 +78,15 @@
         status: orderStatus
       },
       success: function(data) {
-        button.parent().find('.btn').remove();
-        
-        var textbox = $('<input>').attr({
-          type: 'text',
-          class: 'form-control',
-          value: 'Checked',
-          readonly: true
-        }).css({
-          width: '100px',
-          height: '40px'
-        });
-
-        button.parent().append(textbox);
+        if (orderStatus === 'pending') {
+          button.removeClass('btn-success').removeClass('btn-light').addClass('btn-primary').html('Marcar').attr('data-order-status', 'concluded');
+          button.parent('.btn-group').find('.btn-success').remove();
+        } else {
+          button.removeClass('btn-primary').addClass('btn-success').html('<i class="fas fa-check"></i>');
+          var newButton = $('<button>').addClass('btn btn-light change-order-status').attr('data-order-status', 'pending').attr('data-order-id', orderId)
+                                       .html('<i class="fas fa-sync-alt"></i>');
+          button.after(newButton);
+        }
       },
       error: function(xhr, status, error) {
 
