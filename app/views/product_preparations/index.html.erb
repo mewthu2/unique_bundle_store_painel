@@ -15,11 +15,15 @@
         </thead>
         <tbody>
           <% @product_preparations.each do |product_preparation| %>
+            <% supplier_urls = product_preparation.preparation_items.map(&:product).pluck(:supplier_url) %>
             <tr>
               <td class="text-center">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <%= link_to edit_product_preparation_path(id: product_preparation.id), class: 'btn btn-light btn-sm text-dark' do %>
+                  <%= link_to edit_product_preparation_path(id: product_preparation.id), class: 'btn btn-light btn-sm text-dark me-1' do %>
                     <i class="fas fa-edit"></i>
+                  <% end %>
+                  <%= link_to '', class: 'btn btn-light btn-sm text-dark me-1 openLinks', data: { links: supplier_urls } do %>
+                    <i class="fab fa-internet-explorer"></i>
                   <% end %>
                   <%= button_to "<i class='fa fa-times'></i>".html_safe, product_preparation_path(product_preparation), data: { confirm: "Are you sure?" }, method: :delete, class: 'btn btn-danger btn-sm text-dark' %>
                 </div>
@@ -43,5 +47,25 @@
     $('form#search-form').submit();
   });
 
+  document.addEventListener('DOMContentLoaded', function() {
+    var openLinks = document.querySelectorAll('.openLinks');
+    
+    openLinks.forEach(function(openLink) {
+      openLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        
+        var links = JSON.parse(this.dataset.links);
+
+        links.forEach(function(link) {
+          if (link !== null) {
+            console.log('Link:', link);
+            window.open(link);
+          } else {
+            console.log('Link not found..')
+          };
+        });
+      });
+    });
+  });
 </script>
 
