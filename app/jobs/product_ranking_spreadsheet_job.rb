@@ -1,8 +1,6 @@
 class ProductRankingSpreadsheetJob < ApplicationJob
   queue_as :default
 
-  queue_as :default
-
   def perform(product_sales)
     workbook = RubyXL::Workbook.new
 

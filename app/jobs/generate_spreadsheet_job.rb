@@ -7,7 +7,7 @@ class GenerateSpreadsheetJob < ApplicationJob
     tab = workbook.worksheets[0]
     tab.sheet_name = 'Product Spreadsheet'
 
-    header = ['Item Name', 
+    header = ['Item Name',
               'Item Description',
               'Listing ID',
               'Seller SKU',
