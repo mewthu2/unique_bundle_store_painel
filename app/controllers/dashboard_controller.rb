@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   before_action :load_references, only: [:index, :generate_spreadsheet]
+  before_action :product_ranking_references, only: [:product_ranking, :product_ranking_spreadsheet]
 
   def index; end
 
@@ -28,20 +29,29 @@ class DashboardController < ApplicationController
     UpdateOrderItemsJob.perform_now
   end
 
-  def product_ranking
-    week_of_month = (Date.today.day + Date.today.beginning_of_month.wday - 1) / 7
-    @last_seven_days = ProductSale.where(kind: :seven_days,
-                                         month_refference: Date.today.strftime('%B'),
-                                         year_refference: Date.today.year,
-                                         week_refference: week_of_month)
-                                  .order(unit_count: :desc)
-    @last_thirty_days = ProductSale.where(kind: :thirty_days,
-                                          month_refference: Date.today.strftime('%B'),
-                                          year_refference: Date.today.year)
-                                   .order(unit_count: :desc)
+  def product_ranking; end
+
+  def product_ranking_spreadsheet
+    send_data(ProductRankingSpreadsheetJob.perform_now(@product_sales),
+              disposition: %(attachment; filename=products_ranking_#{DateTime.now}.xlsx))
   end
 
   private
+
+  def product_ranking_references
+    @product_sales = ProductSale.where(kind: params[:interval] == 'all' ? ['seven_days', 'thirty_days'] : params[:interval],
+                                       month_refference: params[:month_refference].present? ? params[:month_refference] : Date.today.strftime('%B'),
+                                       year_refference: params[:year_refference].present? ? params[:year_refference] : Date.today.year)
+                                .joins(:product)
+                                .where('products.seller_sku LIKE :valor OR
+                                  products.asin1 LIKE :valor OR
+                                  products.listing_id LIKE :valor OR
+                                  products.id_product LIKE :valor OR
+                                  products.item_name LIKE :valor OR
+                                  products.item_description LIKE :valor OR
+                                  products.id LIKE :valor', valor: "#{params[:search]}%")
+                                .order(unit_count: :desc)
+  end
 
   def load_references
     @products = Product.left_joins(:preparation_items)

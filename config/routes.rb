@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       post :generate_spreadsheet
       get :update_order_markups
       get :product_ranking
+      post :product_ranking_spreadsheet
     end
   end
 

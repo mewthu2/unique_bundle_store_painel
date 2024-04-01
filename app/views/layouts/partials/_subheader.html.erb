@@ -34,7 +34,12 @@
         <li><%= link_to update_order_markups_dashboard_index_path, class: 'dropdown-item' do %><i class="fas fa-retweet"></i> Atualização de Items FBM <% end %></li>
       </ul>
     </span>
-    <%= link_to product_ranking_dashboard_index_path, class: 'text-light link', style: 'margin-left: 10px;' do %>
+    <%= link_to product_ranking_dashboard_index_path(
+                interval: 'all', 
+                month_refference: 1.month.ago.strftime('%B'), 
+                year_refference: Date.today.year.to_s, 
+                search: ''
+              ), class: 'text-light link', style: 'margin-left: 10px;' do %>
       <i class="fa-regular fa-trophy text-info"></i>
       <span class="name-col">
         Ranqueamento de produtos
