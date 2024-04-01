@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       post :change_order_markup_status
       post :generate_spreadsheet
       get :update_order_markups
+      get :product_ranking
     end
   end
 

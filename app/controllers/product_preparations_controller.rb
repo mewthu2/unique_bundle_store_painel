@@ -124,7 +124,7 @@ class ProductPreparationsController < ApplicationController
       product = OrderItem.find_by(amazon_order_id: order[:amazon_order_id])&.product
       product_id = product&.id
 
-      order.merge({ product_id: product_id })
+      order.merge({ product_id: })
     end
   end
 

@@ -28,6 +28,19 @@ class DashboardController < ApplicationController
     UpdateOrderItemsJob.perform_now
   end
 
+  def product_ranking
+    week_of_month = (Date.today.day + Date.today.beginning_of_month.wday - 1) / 7
+    @last_seven_days = ProductSale.where(kind: :seven_days,
+                                         month_refference: Date.today.strftime('%B'),
+                                         year_refference: Date.today.year,
+                                         week_refference: week_of_month)
+                                  .order(unit_count: :desc)
+    @last_thirty_days = ProductSale.where(kind: :thirty_days,
+                                          month_refference: Date.today.strftime('%B'),
+                                          year_refference: Date.today.year)
+                                   .order(unit_count: :desc)
+  end
+
   private
 
   def load_references

@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_03_223440) do
-  create_table "order_items", charset: "utf8mb3", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2024_03_30_201205) do
+  create_table "order_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.string "amazon_order_id"
     t.string "quantity"
@@ -20,14 +20,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_03_223440) do
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end
 
-  create_table "order_markups", charset: "utf8mb3", force: :cascade do |t|
+  create_table "order_markups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "status"
     t.string "amazon_order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "preparation_items", charset: "utf8mb3", force: :cascade do |t|
+  create_table "preparation_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "product_preparation_id", null: false
     t.bigint "product_id", null: false
     t.integer "quantity"
@@ -38,13 +38,32 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_03_223440) do
     t.index ["product_preparation_id"], name: "index_preparation_items_on_product_preparation_id"
   end
 
-  create_table "product_preparations", charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_preparations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "products", charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_sales", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "kind"
+    t.string "month_refference"
+    t.string "week_refference"
+    t.string "year_refference"
+    t.string "interval"
+    t.string "unit_count"
+    t.string "order_item_count"
+    t.string "order_count"
+    t.string "average_unit_price"
+    t.string "average_unit_price_currency"
+    t.string "total_sales"
+    t.string "total_sales_currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_sales_on_product_id"
+  end
+
+  create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "item_name"
     t.text "item_description", size: :long
     t.string "listing_id"
@@ -70,7 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_03_223440) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", charset: "utf8mb3", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "phone"
     t.string "email", default: "", null: false
@@ -99,4 +118,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_03_223440) do
   add_foreign_key "order_items", "products"
   add_foreign_key "preparation_items", "product_preparations"
   add_foreign_key "preparation_items", "products"
+  add_foreign_key "product_sales", "products"
 end

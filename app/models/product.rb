@@ -3,6 +3,7 @@ class Product < ApplicationRecord
   after_commit :update_product_supplier_url
   # Associacoes
   has_many :preparation_items
+  has_many :product_sales
   # Validacoes
 
   # Escopos
