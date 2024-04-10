@@ -78,7 +78,7 @@ class ProductPreparationsController < ApplicationController
   def generate_tag
     product_preparation_ids_array = params[:product_preparation_ids].split(',')
     product_preparation_ids_integers = []
-    product_preparation_ids_array.each do |id|
+    product_preparation_ids_array.map do |id|
       product_preparation_ids_integers << id.to_i
     end
 
@@ -94,7 +94,7 @@ class ProductPreparationsController < ApplicationController
   def generate_fnsku_tag
     product_preparation_ids_array = params[:product_preparation_ids].split(',')
     product_preparation_ids_integers = []
-    product_preparation_ids_array.each do |id|
+    product_preparation_ids_array.map do |id|
       product_preparation_ids_integers << id.to_i
     end
 

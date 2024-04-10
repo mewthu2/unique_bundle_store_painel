@@ -22,9 +22,9 @@ class UpdateOrderItemsJob < ApplicationJob
         next unless product.present?
         next if OrderItem.find_by(amazon_order_id: order)
 
-        p 'Descansando pra Amazon não tilta'
+        p('Descansando pra Amazon não tilta')
         sleep(2.seconds)
-        p 'Tankaste feminha'
+        p('Tankaste feminha')
 
         OrderItem.find_or_create_by(product_id: product.id, amazon_order_id: order, quantity: order_item['QuantityOrdered'])
       end

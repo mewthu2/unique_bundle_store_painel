@@ -37,8 +37,7 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
 
       prd.update_columns(pending_customer_order_quantity:,
                          quantity: response&.dig('payload', 'inventorySummaries', 0, 'totalQuantity'),
-                         fnsku: response&.dig('payload', 'inventorySummaries', 0, 'fnSku')
-                        )
+                         fnsku: response&.dig('payload', 'inventorySummaries', 0, 'fnSku'))
     end
   end
 

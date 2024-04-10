@@ -44,7 +44,6 @@ class OrderMarksController < ApplicationController
   def order_mark_params
     params.require(:order_mark)
           .permit(:amazon_order_id,
-                  :bought
-                 )
+                  :bought)
   end
 end

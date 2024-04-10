@@ -8,7 +8,7 @@ module Amazon
       }
 
       orders_uri = "#{ENV['ENDPOINT_AMAZON']}/orders/v0/orders"
-      response = HTTParty.get(orders_uri, query: request_params, headers: { 'x-amz-access-token' => access_token })
+      HTTParty.get(orders_uri, query: request_params, headers: { 'x-amz-access-token' => access_token })
     end
 
     def self.task_relatory
@@ -23,7 +23,7 @@ module Amazon
       }
 
       reports_uri = "#{ENV['ENDPOINT_AMAZON']}/reports/2021-06-30/reports"
-      report_response = HTTParty.post(reports_uri, body: report_params.to_json, headers: { 'Content-Type' => 'application/json', 'x-amz-access-token' => access_token })
+      HTTParty.post(reports_uri, body: report_params.to_json, headers: { 'Content-Type' => 'application/json', 'x-amz-access-token' => access_token })
     end
 
     def self.view_relatory(report_document_id)
@@ -40,19 +40,19 @@ module Amazon
     end
 
     def parse_data(api_response)
-      lines_2 = api_response.split("\n")
+      lines2 = api_response.split("\n")
 
-      header_2 = lines_2.first.split("\t")
+      header2 = lines_2.first.split("\t")
 
       result_hash = {}
 
-      lines_2[1..-1].each do |line|
-        values_2 = line.split("\t")
-        listing_id = values_2[header_2.index("sku")]
-        data_hash_2 = {}
+      lines2[1..].each do |line|
+        values2 = line.split("\t")
+        listing_id = values_2[header_2.index('sku')]
+        datahash2 = {}
 
-        header_2.each_with_index do |key, index|
-          data_hash_2[key] = values_2[index]
+        header2.each_with_index do |key, index|
+          datahash2[key] = values2[index]
         end
 
         result_hash[listing_id] = data_hash_2
@@ -84,14 +84,14 @@ module Amazon
       inventory_uri = "#{ENV['ENDPOINT_AMAZON']}/fba/inventory/v1/summaries"
 
       # Fazendo a requisição GET
-      response = HTTParty.get(
+      HTTParty.get(
         inventory_uri,
         query: request_params,
         headers: { 'x-amz-access-token' => access_token }
       )
     end
 
-    def self.get_inventory_summaries
+    def self.inventory_summaries
       token_params = {
         grant_type: 'refresh_token',
         refresh_token: ENV['REFRESH_TOKEN'],
@@ -111,7 +111,7 @@ module Amazon
         marketplaceIds: ENV['MARKETPLACE_ID']
       }
 
-      response = HTTParty.get(
+      HTTParty.get(
         inventory_uri,
         query: request_params,
         headers: { 'x-amz-access-token' => access_token }
@@ -137,7 +137,7 @@ module Amazon
         marketplaceIds: ENV['MARKETPLACE_ID']
       }
 
-      response = HTTParty.get(
+      HTTParty.get(
         inventory_uri,
         query: request_params,
         headers: { 'x-amz-access-token' => access_token }
@@ -147,9 +147,9 @@ module Amazon
     # fonte: https://developer-docs.amazon.com/sp-api/docs/sales-api-v1-use-case-guide
     def self.search_order_metrics
       Product.all.each do |prd|
-        p 'dormindo 2 segundos'
+        p('dormindo 2 segundos')
         sleep(2.seconds)
-        p 'acordei'
+        p('acordei')
         end_date = DateTime.now
         start_date = end_date - 29
 
@@ -190,14 +190,14 @@ module Amazon
         client_secret: ENV['LWA_CLIENT_SECRET']
       }
       token_response = HTTParty.post(ENV['TOKEN_URI'], body: token_params)
-      access_token = JSON.parse(token_response.body)['access_token']
+      JSON.parse(token_response.body)['access_token']
     end
 
     def update_fba_products
       Product.where(fulfillment_channel: 'FBA').each do |pfba|
-        p 'dormindo 2 segundos'
+        p('dormindo 2 segundos')
         sleep(2.seconds)
-        p 'acordei - bora atualizar esses fba brabo'
+        p('acordei - bora atualizar esses fba brabo')
         request_params = {
           details: true,
           granularityType: 'Marketplace',
@@ -230,7 +230,7 @@ module Amazon
 
     def create_products(result_hash)
       result_hash.each do |ap|
-        if product = Product.find_by(id_product: ap[1]['product-id'])
+        if product == Product.find_by(id_product: ap[1]['product-id'])
           product.update(item_name: ap[1]['item-name'],
                          item_description: ap[1]['item-description'],
                          listing_id: ap[1]['listing-id'],
