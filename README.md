@@ -7,8 +7,8 @@ Este é o painel administrativo para a Unique Bundle Store. Este painel é const
 Requisitos
 Certifique-se de ter as seguintes dependências instaladas antes de executar o projeto:
 
-Ruby 3.2.0
-Rails 7.1.3
+Ruby 3.2.0,
+Rails 7.1.3,
 Docker e Docker Compose
 
 Configuração e Execução com Docker
