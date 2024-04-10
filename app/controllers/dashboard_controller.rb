@@ -32,7 +32,7 @@ class DashboardController < ApplicationController
   def product_ranking; end
 
   def product_ranking_spreadsheet
-    send_data(ProductRankingSpreadsheetJob.perform_now(@product_sales),
+    send_data(ProductRankingSpreadsheetJob.perform_now(params[:year]),
               disposition: %(attachment; filename=products_ranking_#{DateTime.now}.xlsx))
   end
 

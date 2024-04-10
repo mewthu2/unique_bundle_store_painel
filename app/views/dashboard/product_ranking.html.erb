@@ -37,7 +37,7 @@
     </div>
     <div class="card-footer">
       <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
-      <%= button_tag formaction: product_ranking_spreadsheet_dashboard_index_path, formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha <% end %>
+      <%= button_tag formaction: product_ranking_spreadsheet_dashboard_index_path(year: '2024'), formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> Gerar Planilha 2024<% end %>
     </div>
   <% end %>
   <div class="row">
@@ -85,4 +85,6 @@
     </div>
   </div>
 </div>
-
+<script>
+   $('.table').DataTable();
+</script>
