@@ -1,6 +1,6 @@
 ![Logo da Unique Bundle Store](app/assets/images/admin/logo.png)
 
-<center>Painel Administrativo</center>
+<h1 style="text-align:center;">Painel Administrativo</h1>
 
 Este é o painel administrativo para a Unique Bundle Store. Este painel é construído na arquitetura monolítica do Rails 7.1.3 e usa Ruby 3.2.0 como linguagem de programação. Ele também faz uso de recursos do Hotwire para uma experiência de usuário interativa e responsiva.
 
