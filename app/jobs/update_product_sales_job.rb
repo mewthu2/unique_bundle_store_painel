@@ -15,7 +15,7 @@ class UpdateProductSalesJob < ActiveJob::Base
   def update_thirty_days_sales(kind)
     products = Product.where(status: 'Active')
 
-    data_refference = Date.today.prev_month - 60.day
+    data_refference = Date.today.prev_month
 
     start_date = data_refference.beginning_of_month.strftime('%Y-%m-%dT00:00:00Z')
     end_date = data_refference.strftime('%Y-%m-%dT%H:%M:%SZ')
