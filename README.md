@@ -2,12 +2,12 @@
 
 <h1 style="text-align:center;">Painel Administrativo</h1>
 
-Este é o painel administrativo para a Unique Bundle Store. Este painel é construído na arquitetura monolítica do Rails 7.1.3 e usa Ruby 3.2.0 como linguagem de programação. Ele também faz uso de recursos do Hotwire para uma experiência de usuário interativa e responsiva.
+Este é o painel administrativo para a Unique Bundle Store. Este painel é construído na arquitetura monolítica do Rails 7.1.3 e usa Ruby 3.2.2 como linguagem de programação. Ele também faz uso de recursos do Hotwire para uma experiência de usuário interativa e responsiva.
 
 Requisitos
 Certifique-se de ter as seguintes dependências instaladas antes de executar o projeto:
 
-Ruby 3.2.0,
+Ruby 3.2.2,
 Rails 7.1.3,
 Docker e Docker Compose
 
