@@ -12,6 +12,8 @@ class ProductRankingSpreadsheetJob < ApplicationJob
 
     header = ['Product Name',
               'SKU',
+              'Fulfillment Channel',
+              'ASIN1',
               'January',
               'February',
               'March',
@@ -25,7 +27,7 @@ class ProductRankingSpreadsheetJob < ApplicationJob
               'November',
               'December']
 
-    header.each_with_index { |data, row| tab.add_cell(0, row, data) }
+    header.each_with_index { |data, col| tab.add_cell(0, col, data) }
 
     row_index = 1
 
@@ -33,9 +35,13 @@ class ProductRankingSpreadsheetJob < ApplicationJob
       product = sales.first.product
       tab.add_cell(row_index, 0, product.item_name)
       tab.add_cell(row_index, 1, product.seller_sku)
+      tab.add_cell(row_index, 2, product.fulfillment_channel)
+      tab.add_cell(row_index, 3, product.asin1)
+
+      month_columns = { 'January' => 4, 'February' => 5, 'March' => 6, 'April' => 7, 'May' => 8, 'June' => 9, 'July' => 10, 'August' => 11, 'September' => 12, 'October' => 13, 'November' => 14, 'December' => 15 }
 
       sales.each do |sale|
-        month_index = Date::MONTHNAMES.index(sale.month_refference)
+        month_index = month_columns[sale.month_refference]
         tab.add_cell(row_index, month_index, sale.unit_count)
       end
 
