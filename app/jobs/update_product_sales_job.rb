@@ -1,24 +1,24 @@
 class UpdateProductSalesJob < ActiveJob::Base
-  def perform(kind)
+  def perform(kind, month)
     @access_token = obtain_acess_token
 
-    update_product_sales_info(kind)
+    update_product_sales_info(kind, month)
   end
 
-  def update_product_sales_info(kind)
+  def update_product_sales_info(kind, month)
     case kind
     when 'thirty_days'
-      update_thirty_days_sales(kind)
+      update_thirty_days_sales(kind, month)
     end
   end
 
-  def update_thirty_days_sales(kind)
+  def update_thirty_days_sales(kind, month)
     products = Product.where(status: 'Active')
 
-    data_refference = Date.today.prev_month
+    data_refference = month.present? ? Date.new(Date.today.year, month, 1) : Date.today.prev_month
 
     start_date = data_refference.beginning_of_month.strftime('%Y-%m-%dT00:00:00Z')
-    end_date = data_refference.strftime('%Y-%m-%dT%H:%M:%SZ')
+    end_date = data_refference.end_of_month.strftime('%Y-%m-%dT%H:%M:%SZ')
     date_range = "#{start_date}--#{end_date}"
 
     products.each do |prd|
