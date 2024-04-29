@@ -4,7 +4,7 @@ class ProductSale < ApplicationRecord
   # Associacoes
   belongs_to :product
   # Validacoes
-  validates :product_id, uniqueness: { scope: [:kind, :month_refference, :year_refference], message: 'Já existe um dado de venda deste tipo para este produto neste período.' }
+  validates :product_id, uniqueness: { scope: [:kind, :month_refference, :year_refference, :week_refference], message: 'Já existe um dado de venda deste tipo para este produto neste período.' }
   # Escopos
 
   # Metodos estaticos

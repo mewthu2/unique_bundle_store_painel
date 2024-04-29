@@ -32,14 +32,15 @@ class DashboardController < ApplicationController
   def product_ranking; end
 
   def product_ranking_spreadsheet
-    send_data(ProductRankingSpreadsheetJob.perform_now(params[:year]),
+    send_data(ProductRankingSpreadsheetJob.perform_now(params[:year], params[:kind]),
               disposition: %(attachment; filename=products_ranking_#{DateTime.now}.xlsx))
   end
 
   private
 
   def product_ranking_references
-    @product_sales = ProductSale.where(kind: params[:interval] == 'all' ? ['seven_days', 'thirty_days'] : params[:interval],
+    @product_sales = ProductSale.where(kind: params[:interval],
+                                       week_refference: params[:week_refference].present? ? params[:week_refference] : nil,
                                        month_refference: params[:month_refference].present? ? params[:month_refference] : Date.today.strftime('%B'),
                                        year_refference: params[:year_refference].present? ? params[:year_refference] : Date.today.year)
                                 .joins(:product)

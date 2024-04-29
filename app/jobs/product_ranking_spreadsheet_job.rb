@@ -1,7 +1,19 @@
 class ProductRankingSpreadsheetJob < ApplicationJob
   queue_as :default
 
-  def perform(year)
+  def perform(year, kind)
+    if kind == 'thirty_days'
+      generate_thirty_days_data(year)
+    elsif kind == 'seven_days'
+      generate_seven_days_data(year)
+    else
+      raise ArgumentError, "Invalid 'kind' parameter. Please specify either 'thirty_days' or 'seven_days'."
+    end
+  end
+
+  private
+
+  def generate_thirty_days_data(year)
     product_sales = ProductSale.includes(:product)
                                .where(year_refference: year)
                                .group_by { |sale| sale&.product_id }
@@ -46,6 +58,47 @@ class ProductRankingSpreadsheetJob < ApplicationJob
       end
 
       row_index += 1
+    end
+
+    workbook.stream.read
+  end
+
+  def generate_seven_days_data(year)
+    product_sales = ProductSale.includes(:product)
+                               .where(year_refference: year, kind: 'seven_days')
+                               .group_by { |sale| [sale.product_id, sale.week_refference] }
+
+    workbook = RubyXL::Workbook.new
+    tab = workbook.worksheets[0]
+    tab.sheet_name = 'Product Sales Spreadsheet'
+
+    header = ['Product Name',
+              'SKU',
+              'Fulfillment Channel',
+              'ASIN1',
+              'Month',
+              'Week',
+              'Units Sold']
+
+    header.each_with_index { |data, col| tab.add_cell(0, col, data) }
+
+    row_index = 1
+
+    product_sales.each_value do |sales|
+      product = sales.first.product
+
+      sales.each do |sale|
+        tab.add_cell(row_index, 0, product.item_name)
+        tab.add_cell(row_index, 1, product.seller_sku)
+        tab.add_cell(row_index, 2, product.fulfillment_channel)
+        tab.add_cell(row_index, 3, product.asin1)
+
+        tab.add_cell(row_index, 4, sale.month_refference)
+        tab.add_cell(row_index, 5, sale.week_refference)
+        tab.add_cell(row_index, 6, sale.unit_count)
+
+        row_index += 1
+      end
     end
 
     workbook.stream.read

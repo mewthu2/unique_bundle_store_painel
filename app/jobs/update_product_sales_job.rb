@@ -8,23 +8,25 @@ class UpdateProductSalesJob < ActiveJob::Base
   def update_product_sales_info(kind, month)
     case kind
     when 'thirty_days'
-      update_thirty_days_sales(kind, month)
+      update_thirty_days_sales(month)
+    when 'seven_days'
+      update_seven_days_sales(month)
     end
   end
 
-  def update_thirty_days_sales(kind, month)
+  def update_thirty_days_sales(month)
     products = Product.where(status: 'Active')
 
-    data_refference = month.present? ? Date.new(Date.today.year, month, 1) : Date.today.prev_month
+    data_reference = month.present? ? Date.new(Date.today.year, month, 1) : Date.today.prev_month
 
-    start_date = data_refference.beginning_of_month.strftime('%Y-%m-%dT00:00:00Z')
-    end_date = data_refference.end_of_month.strftime('%Y-%m-%dT%H:%M:%SZ')
+    start_date = data_reference.beginning_of_month.strftime('%Y-%m-%dT00:00:00Z')
+    end_date = data_reference.end_of_month.strftime('%Y-%m-%dT%H:%M:%SZ')
     date_range = "#{start_date}--#{end_date}"
 
     products.each do |prd|
-      next if ProductSale.where(product_id: prd.id, month_refference: data_refference.strftime('%B'), year_refference: Date.today.year, kind:).present?
+      next if ProductSale.where(product_id: prd.id, month_refference: data_reference.strftime('%B'), year_refference: Date.today.year, kind: 'thirty_days').present?
 
-      p('sleeping for 1 seconds...')
+      p('Sleeping for 1 second...')
       sleep(1.seconds)
 
       request_params = {
@@ -42,16 +44,99 @@ class UpdateProductSalesJob < ActiveJob::Base
 
       next unless response['payload'].present?
 
-      update_or_create_product_sale(prd, nil, date_range, data, kind, data_refference)
+      update_or_create_product_sale(prd, nil, date_range, data, 'thirty_days', data_reference)
+    end
+  end
+
+  def update_seven_days_sales(month = nil)
+    products = Product.where(status: 'Active')
+
+    if month.nil?
+      # Calcula a data de início e fim da semana passada
+      last_week_start = (Date.today - 1.week).beginning_of_week
+      last_week_end = (Date.today - 1.week).end_of_week
+
+      week_number = 1
+
+      date_range = "#{last_week_start.strftime('%Y-%m-%dT00:00:00Z')}--#{last_week_end.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+
+      products.each do |prd|
+        next if ProductSale.where(product_id: prd.id,
+                                  week_refference: week_number,
+                                  kind: 'seven_days',
+                                  month_refference: month_start.strftime('%B'),
+                                  year_refference: Date.today.year).present?
+
+        p('Sleeping for 1 second...')
+        sleep(1.seconds)
+
+        request_params = {
+          granularity: 'total',
+          interval: date_range,
+          marketplaceIds: ENV['MARKETPLACE_ID'],
+          sku: prd.seller_sku
+        }
+
+        endpoint = 'https://sellingpartnerapi-na.amazon.com/sales/v1/orderMetrics'
+
+        response = HTTParty.get(endpoint, query: request_params,
+                                          headers: { 'x-amz-access-token' => @access_token })
+        data = response['payload']&.first
+
+        next unless response['payload'].present?
+
+        update_or_create_product_sale(prd, week_number, date_range, data, 'seven_days', last_week_start)
+      end
+    else
+      month_start = Date.new(Date.today.year, month, 1)
+      weeks_in_month = (month_start..month_start.end_of_month).each_slice(7)
+
+      week_number = 1
+
+      weeks_in_month.each do |week|
+        start_date = week.first.strftime('%Y-%m-%dT00:00:00Z')
+        end_date = week.last.strftime('%Y-%m-%dT%H:%M:%SZ')
+        date_range = "#{start_date}--#{end_date}"
+
+        products.each do |prd|
+          product_sale = ProductSale.where(product_id: prd.id,
+                                           week_refference: week_number,
+                                           kind: 'seven_days',
+                                           interval: date_range,
+                                           month_refference: month_start.strftime('%B'),
+                                           year_refference: Date.today.year)
+          next if product_sale.present?
+
+          p('Sleeping for 1 second...')
+          sleep(1.seconds)
+
+          request_params = {
+            granularity: 'total',
+            interval: date_range,
+            marketplaceIds: ENV['MARKETPLACE_ID'],
+            sku: prd.seller_sku
+          }
+
+          endpoint = 'https://sellingpartnerapi-na.amazon.com/sales/v1/orderMetrics'
+
+          response = HTTParty.get(endpoint, query: request_params,
+                                            headers: { 'x-amz-access-token' => @access_token })
+          data = response['payload']&.first
+
+          next unless response['payload'].present?
+          update_or_create_product_sale(prd, week_number, date_range, data, 'seven_days', month_start)
+        end
+        week_number += 1
+      end
     end
   end
 
   private
 
-  def update_or_create_product_sale(prd, week_of_month, date_range, data, kind, data_refference)
+  def update_or_create_product_sale(prd, week_of_month, date_range, data, kind, data_reference)
     ProductSale.find_or_create_by(product_id: prd.id,
                                   kind:,
-                                  month_refference: data_refference.strftime('%B'),
+                                  month_refference: data_reference.strftime('%B'),
                                   week_refference: week_of_month,
                                   year_refference: Date.today.year,
                                   interval: date_range,

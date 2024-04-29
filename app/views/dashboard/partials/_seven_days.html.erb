@@ -1,0 +1,95 @@
+ <div class="container"> 
+  <%= form_tag(product_ranking_dashboard_index_path, method: 'get', id: 'search-form' ) do %>
+    <div class="card mb-lg advanced-search-form bg-dark text-light" id="filters">
+      <div class="card-header text-info d-flex justify-content-center">
+        Pesquisa avançada
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6 col-md-2">
+            <%= label_tag :interval, 'Intervalo' %>
+            <%= select_tag :interval, options_for_select(
+                [['7 dias', 'seven_days']],
+                params[:interval]
+              ), include_blank: false, class: 'form-control chosen-select' 
+            %>
+          </div>
+          <div class="col-6 col-md-2">
+            <%= label_tag :month_refference, 'Mês de referência' %>
+            <%= select_tag :month_refference, options_for_select(Date::MONTHNAMES.compact.map(&:titleize), (params[:month_refference].presence || 1.month.ago.strftime('%B'))), include_blank: false, class: 'form-control chosen-select' %>
+          </div>
+          <div class="col-3 col-md-2">
+            <%= label_tag :week_refference, 'Semana' %>
+            <%= select_tag :week_refference, options_for_select(
+                [['Semana 1', '1'], ['Semana 2', '2'], ['Semana 3', '3'], ['Semana 4', '4'], ['Semana 5', '5']],
+                params[:interval]
+              ), include_blank: false, class: 'form-control chosen-select' 
+            %>
+          </div>
+          <div class="col-3 col-md-2">
+            <%= label_tag :year_refference, 'Ano de referência?' %>
+            <%= select_tag :year_refference, options_for_select(['Todos', 
+                Date.today.year.to_s, (Date.today.year + 1).to_s, 
+                (Date.today.year + 2).to_s, (Date.today.year + 3).to_s], 
+                (params[:year_refference].presence || Date.today.year.to_s)), 
+                include_blank: false, class: 'form-control chosen-select' 
+            %>
+          </div>
+          <div class="col-12 col-md-4">
+            <%= label_tag :search, 'Procurar' %>
+            <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Pesquisar', autofocus: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <%= button_tag class: 'btn btn-secondary text-info', name: '' do %><i class="fa fa-search text-info"></i> Pesquisar<% end %>
+      <%= button_tag formaction: product_ranking_spreadsheet_dashboard_index_path(year: '2024', kind: 'seven_days'), formmethod: :post, class: 'btn btn-success' do %><i class="fa fa-file-excel "></i> <b>Semanal</b> - Gerar Planilha 2024<% end %>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-dark table-hover table-responsive table-striped" style="overflow-x: scroll;" id="products-table">
+        <thead>
+          <tr>
+            <th class="text-center"><i class="fa fa-ellipsis-v"></i></th>
+            <th class="text-center"><%= 'Semana' %></th>
+            <th class="text-center"><%= 'Unidades vendidas' %></th>
+            <th class="text-center"><%= 'Produto' %></th>
+            <th class="text-center"><%= 'ASIN' %></th>
+            <th class="text-center"><%= 'Armazém' %></th>
+            <th class="text-center"><%= 'Mês/Ano de refernência' %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% product_sales.each do |product_sale| %>
+            <tr>
+              <td class="text-center">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <%= link_to edit_product_path(product_sale.product), class: 'btn btn-light btn-sm text-dark' do %> <i class="fas fa-edit"></i><% end %>
+                  <% if product_sale.product.supplier_url.present? %>
+                    <%= link_to product_sale.product.supplier_url, class: 'btn btn-light btn-sm text-dark', target:'_blank' do %> <i class="fa-brands fa-internet-explorer"></i><% end %>
+                  <% end %>
+                </div>
+              </td>
+              <td class="text-center"><%= product_sale.week_refference %></td>
+              <td class="text-center"><span class="badge bg-dark text-warning" style="font-size: 20px !important;"><%= product_sale.unit_count %></span></td>
+              <td class="text-center" width="400"><%= ActionController::Base.helpers.truncate(product_sale.product.item_name, length: 120, omission: '...') %></td>
+              <td class="text-center"><%= product_sale.product.asin1 %></td>
+              <td class="text-center"><%= product_sale.product.fulfillment_channel == 'FBA' ? %(<span class="badge bg-primary"><i class="fa-brands fa-amazon"></i> FBA</span>).html_safe : %(<span class="badge bg-secondary"><i class="fas fa-globe-americas"></i> FBM</span>).html_safe %></td>
+              <td class="text-center"><%= product_sale.month_refference %> / <%= product_sale.year_refference %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="14">
+              
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
