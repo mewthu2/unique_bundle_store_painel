@@ -66,19 +66,22 @@ class ProductRankingSpreadsheetJob < ApplicationJob
   def generate_seven_days_data(year)
     product_sales = ProductSale.includes(:product)
                                .where(year_refference: year, kind: 'seven_days')
-                               .group_by { |sale| [sale.product_id, sale.week_refference] }
+                               .group_by { |sale| sale&.product_id }
 
     workbook = RubyXL::Workbook.new
     tab = workbook.worksheets[0]
     tab.sheet_name = 'Product Sales Spreadsheet'
 
-    header = ['Product Name',
-              'SKU',
-              'Fulfillment Channel',
-              'ASIN1',
-              'Month',
-              'Week',
-              'Units Sold']
+    header = ['Product Name', 'SKU', 'Fulfillment Channel', 'ASIN1']
+
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    weeks = (1..5).map { |week| "Week #{week}" }
+
+    months.each do |month|
+      weeks.each do |week|
+        header << "#{month} #{week}"
+      end
+    end
 
     header.each_with_index { |data, col| tab.add_cell(0, col, data) }
 
@@ -87,18 +90,26 @@ class ProductRankingSpreadsheetJob < ApplicationJob
     product_sales.each_value do |sales|
       product = sales.first.product
 
+      monthly_sales = Hash.new { |h, k| h[k] = Hash.new(0) }
+
       sales.each do |sale|
-        tab.add_cell(row_index, 0, product.item_name)
-        tab.add_cell(row_index, 1, product.seller_sku)
-        tab.add_cell(row_index, 2, product.fulfillment_channel)
-        tab.add_cell(row_index, 3, product.asin1)
-
-        tab.add_cell(row_index, 4, sale.month_refference)
-        tab.add_cell(row_index, 5, sale.week_refference)
-        tab.add_cell(row_index, 6, sale.unit_count)
-
-        row_index += 1
+        month_week = "#{sale.month_refference} #{weeks[sale.week_refference.to_i - 1]}"
+        monthly_sales[sale.month_refference][month_week] += sale.unit_count.to_i
       end
+
+      tab.add_cell(row_index, 0, product.item_name)
+      tab.add_cell(row_index, 1, product.seller_sku)
+      tab.add_cell(row_index, 2, product.fulfillment_channel)
+      tab.add_cell(row_index, 3, product.asin1)
+
+      months.each_with_index do |month, month_index|
+        weeks.each_with_index do |week, week_index|
+          month_week = "#{month} #{week}"
+          tab.add_cell(row_index, 4 + (month_index * weeks.length) + week_index, monthly_sales[month][month_week])
+        end
+      end
+
+      row_index += 1
     end
 
     workbook.stream.read
