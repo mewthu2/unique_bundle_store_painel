@@ -11,5 +11,5 @@ staging:
   logger: false
 
 production:
-  url: ENV["REDIS_URL"]
+  url: ENV["REDISCLOUD_URL"]
   logger: warn
