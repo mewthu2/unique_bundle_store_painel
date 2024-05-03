@@ -51,44 +51,8 @@ class UpdateProductSalesJob < ActiveJob::Base
   def update_seven_days_sales(month = nil)
     products = Product.where(status: 'Active')
 
-    if month.nil?
-      # Calcula a data de início e fim da semana passada
-      last_week_start = (Date.today - 1.week).beginning_of_week
-      last_week_end = (Date.today - 1.week).end_of_week
-
-      week_number = 1
-
-      date_range = "#{last_week_start.strftime('%Y-%m-%dT00:00:00Z')}--#{last_week_end.strftime('%Y-%m-%dT%H:%M:%SZ')}"
-
-      products.each do |prd|
-        next if ProductSale.where(product_id: prd.id,
-                                  week_refference: week_number,
-                                  kind: 'seven_days',
-                                  month_refference: month_start.strftime('%B'),
-                                  year_refference: Date.today.year).present?
-
-        p('Sleeping for 1 second...')
-        sleep(1.seconds)
-
-        request_params = {
-          granularity: 'total',
-          interval: date_range,
-          marketplaceIds: ENV['MARKETPLACE_ID'],
-          sku: prd.seller_sku
-        }
-
-        endpoint = 'https://sellingpartnerapi-na.amazon.com/sales/v1/orderMetrics'
-
-        response = HTTParty.get(endpoint, query: request_params,
-                                          headers: { 'x-amz-access-token' => @access_token })
-        data = response['payload']&.first
-
-        next unless response['payload'].present?
-
-        update_or_create_product_sale(prd, week_number, date_range, data, 'seven_days', last_week_start)
-      end
-    else
-      month_start = Date.new(Date.today.year, month, 1)
+    if month.present?
+      month_start = Date.new(Date.today.year, Date.today.month, 1)
       weeks_in_month = (month_start..month_start.end_of_month).each_slice(7)
 
       week_number = 1
@@ -127,6 +91,42 @@ class UpdateProductSalesJob < ActiveJob::Base
           update_or_create_product_sale(prd, week_number, date_range, data, 'seven_days', month_start)
         end
         week_number += 1
+      end
+    else
+      # Calcula a data de início e fim da semana passada
+      last_week_start = (Date.today - 1.week).beginning_of_week
+      last_week_end = (Date.today - 1.week).end_of_week
+
+      week_number = 1
+
+      date_range = "#{last_week_start.strftime('%Y-%m-%dT00:00:00Z')}--#{last_week_end.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+
+      products.each do |prd|
+        next if ProductSale.where(product_id: prd.id,
+                                  week_refference: week_number,
+                                  kind: 'seven_days',
+                                  month_refference: Date.today.month,
+                                  year_refference: Date.today.year).present?
+
+        p('Sleeping for 1 second...')
+        sleep(1.seconds)
+
+        request_params = {
+          granularity: 'total',
+          interval: date_range,
+          marketplaceIds: ENV['MARKETPLACE_ID'],
+          sku: prd.seller_sku
+        }
+
+        endpoint = 'https://sellingpartnerapi-na.amazon.com/sales/v1/orderMetrics'
+
+        response = HTTParty.get(endpoint, query: request_params,
+                                          headers: { 'x-amz-access-token' => @access_token })
+        data = response['payload']&.first
+
+        next unless response['payload'].present?
+
+        update_or_create_product_sale(prd, week_number, date_range, data, 'seven_days', last_week_start)
       end
     end
   end
