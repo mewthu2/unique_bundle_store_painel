@@ -3,7 +3,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   devise_for :user, skip: [:registrations]
   root to: 'home#index'
-
+  mount Sidekiq::Web => '/sidekiq'
   resources :dashboard do
     collection do
       get :view_live_orders

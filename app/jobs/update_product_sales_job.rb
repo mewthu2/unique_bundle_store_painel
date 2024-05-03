@@ -1,4 +1,6 @@
 class UpdateProductSalesJob < ActiveJob::Base
+  queue_as :default
+
   def perform(kind, month)
     @access_token = obtain_acess_token
 
