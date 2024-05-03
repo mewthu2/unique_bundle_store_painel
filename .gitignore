@@ -65,3 +65,4 @@ mysql-data
 
 # Ignore node_modules
 /node_modules/
+/config/credentials.yml.enc
