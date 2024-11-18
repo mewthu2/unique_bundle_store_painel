@@ -1,42 +1,42 @@
 <header class="navbar-header subheader">
   <div class="navbar-content">
-    <%= link_to root_path, class: 'text-light link' do %>
-      <i class="fa-solid fa-home text-info"></i>
+    <%= link_to root_path, class: 'text-primary link' do %>
+      <i class="fa-solid fa-home text-dark"></i>
       <span class="name-col">
         Home
       </span>
     <% end %>
-    <%= link_to dashboard_index_path, class: 'text-light link', style: 'margin-left: 10px;' do %>
-      <i class="fa-solid fa-binoculars text-info"></i>
+    <%= link_to dashboard_index_path, class: 'text-primary link', style: 'margin-left: 10px;' do %>
+      <i class="fa-solid fa-binoculars text-dark"></i>
       <span class="name-col">
         Acompanhamento de estoque
       </span>
     <% end %>
-    <%= link_to product_preparations_path, class: 'text-light link', style: 'margin-left: 10px;' do %>
-      <i class="fa-regular fa-paper-plane text-info"></i>
+    <%= link_to product_preparations_path, class: 'text-primary link', style: 'margin-left: 10px;' do %>
+      <i class="fa-regular fa-paper-plane text-dark"></i>
       <span class="name-col">
         Preparação de Envio
       </span>
     <% end %>
     <span class="dropdown-center">
-      <span class="dropdown-toggle name-col text-light link" data-bs-toggle="dropdown" aria-expanded="false" style='margin-left: 10px; cursor:pointer;'>
-        <i class="fas fa-people-carry text-info"></i> Ordens
+      <span class="dropdown-toggle name-col text-primary link" data-bs-toggle="dropdown" aria-expanded="false" style='margin-left: 10px; cursor:pointer;'>
+        <i class="fas fa-people-carry text-dark"></i> Ordens
       </span>
       <ul class="dropdown-menu">
         <li><%= link_to view_live_orders_dashboard_index_path(order_kind: 'MFN', next_token: ''), class: 'dropdown-item' do %><i class="fas fa-globe-americas"></i> FBM <% end %></li>
       </ul>
     </span>
     <span class="dropdown-center">
-      <span class="dropdown-toggle name-col text-light link" data-bs-toggle="dropdown" aria-expanded="false" style='margin-left: 10px; cursor:pointer;'>
-        <i class="fas fa-cogs text-info"></i> Funções
+      <span class="dropdown-toggle name-col text-primary link" data-bs-toggle="dropdown" aria-expanded="false" style='margin-left: 10px; cursor:pointer;'>
+        <i class="fas fa-cogs text-dark"></i> Funções
       </span>
       <ul class="dropdown-menu">
         <li><%= link_to update_order_markups_dashboard_index_path, class: 'dropdown-item' do %><i class="fas fa-retweet"></i> Atualização de Items FBM <% end %></li>
       </ul>
     </span>
     <span class="dropdown-center">
-      <span class="dropdown-toggle name-col text-light link" data-bs-toggle="dropdown" aria-expanded="false" style='margin-left: 10px; cursor:pointer;'>
-        <i class="fa-regular fa-trophy text-info"></i> Ranqueamento de Produtos
+      <span class="dropdown-toggle name-col text-primary link" data-bs-toggle="dropdown" aria-expanded="false" style='margin-left: 10px; cursor:pointer;'>
+        <i class="fa-regular fa-trophy text-dark"></i> Ranqueamento de Produtos
       </span>
       <ul class="dropdown-menu">
         <li>

@@ -57,7 +57,6 @@ class UpdateFbaProductsSituationJob < ActiveJob::Base
   def obtain_acess_token
     token_params = {
       grant_type: 'refresh_token',
-      refresh_token: ENV['REFRESH_TOKEN'],
       client_id: ENV['LWA_APP_ID'],
       client_secret: ENV['LWA_CLIENT_SECRET']
     }

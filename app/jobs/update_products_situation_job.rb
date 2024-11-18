@@ -39,7 +39,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
 
       p(status.body)
       p('Relatório ainda não concluído. Aguardando 10 segundos antes de verificar novamente...')
-      sleep(5)
+      sleep(10)
     end
   end
 
@@ -47,6 +47,7 @@ class UpdateProductsSituationJob < ActiveJob::Base
     documents_uri = "#{ENV['ENDPOINT_AMAZON']}/reports/2021-06-30/documents/#{report_document_id}"
     documents_response = HTTParty.get(documents_uri, headers: { 'x-amz-access-token' => @access_token })
     api_response = HTTParty.get(documents_response['url'])
+    p api_response
     parse_data(api_response)
   end
 
