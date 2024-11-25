@@ -65,11 +65,11 @@ class UpdateProductSalesJob < ActiveJob::Base
 
       products.each do |prd|
         product_sale = ProductSale.where(product_id: prd.id,
-                                          week_refference: week_number,
-                                          kind: 'seven_days',
-                                          interval: date_range,
-                                          month_refference: month_start.strftime('%B'),
-                                          year_refference: Date.today.year)
+                                         week_refference: week_number,
+                                         kind: 'seven_days',
+                                         interval: date_range,
+                                         month_refference: month_start.strftime('%B'),
+                                         year_refference: Date.today.year)
         next if product_sale.present?
 
         p('Sleeping for 1 second...')
